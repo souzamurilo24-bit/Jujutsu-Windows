@@ -352,6 +352,69 @@ select:focus {
   padding: 16px;
 }
 
+.wizard-steps {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin: 20px 0 18px;
+}
+
+.wizard-step {
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  background: var(--surface-2);
+  color: var(--muted);
+  padding: 10px 18px;
+  font-weight: 700;
+}
+
+.wizard-step.is-active {
+  color: var(--text);
+  border-color: var(--violet);
+  background: rgba(141, 108, 255, 0.1);
+}
+
+.wizard-panel {
+  display: none;
+}
+
+.wizard-panel.is-active {
+  display: block;
+}
+
+.form-grid {
+  display: grid;
+  gap: 14px;
+  margin-top: 12px;
+}
+
+.review-card {
+  padding: 20px;
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  background: var(--surface-3);
+}
+
+.form-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 12px;
+  margin-top: 20px;
+}
+
+.complete-card {
+  padding: 32px;
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  background: var(--surface-3);
+  text-align: center;
+}
+
+.complete-card h2 {
+  margin-bottom: 16px;
+}
+
+
 .identity-line {
   display: grid;
   grid-template-columns: 54px 1fr;
