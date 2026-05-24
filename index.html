@@ -3,23 +3,20 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Feiticeiros & Maldições | Ficha</title>
+    <title>Feiticeiros & Maldições</title>
     <link rel="stylesheet" href="styles.css" />
   </head>
   <body>
     <canvas id="veil" aria-hidden="true"></canvas>
 
     <header class="topbar">
-      <a class="brand" href="#home" aria-label="Feiticeiros & Maldições">
+      <a class="brand" href="index.html" aria-label="Feiticeiros & Maldições">
         <span class="brand-mark">FM</span>
         <span class="brand-name"><i>F</i><i>M</i><i>:</i><i>C</i><i>R</i><i>I</i><i>S</i></span>
       </a>
       <nav class="nav" aria-label="Seções">
-        <button class="nav-button is-active" data-tab="home">Início</button>
-        <button class="nav-button" data-tab="builder">Agentes</button>
-        <button class="nav-button" data-tab="rules">Regras</button>
-        <button class="nav-button" data-tab="combat">Combate</button>
-        <button class="nav-button" data-tab="export">Arquivo</button>
+        <a class="nav-button is-active" href="index.html">Início</a>
+        <a class="nav-button" href="builder.html">Feitiçeiros</a>
       </nav>
       <button class="profile-dot" type="button" aria-label="Perfil"></button>
     </header>
@@ -31,11 +28,11 @@
             <p class="kicker">Terminal de campanha</p>
             <h1>Arquivo tático de Feiticeiros & Maldições</h1>
             <p>
-              Crie agentes, consulte regras do sistema, organize habilidades e mantenha a ficha pronta para mesa.
+              Crie Feitiçeiros, consulte regras do sistema, organize habilidades e mantenha a ficha pronta para mesa.
             </p>
             <div class="home-actions">
-              <button class="primary-button" type="button" data-open-tab="builder">Abrir ficha</button>
-              <button class="ghost-button" type="button" data-open-tab="rules">Consultar regras</button>
+              <a class="primary-button" href="builder.html">Novo feiticeiro</a>
+              <a class="ghost-button" href="builder.html">Abrir feitiçeiros</a>
             </div>
           </article>
 
@@ -56,186 +53,28 @@
         </section>
 
         <section class="home-modules">
-          <article class="module-card" data-open-tab="builder">
+          <a class="module-card" href="builder.html">
             <span>01</span>
-            <h2>Agentes</h2>
+            <h2>Feitiçeiros</h2>
             <p>Ficha interativa com atributos, PV, PE, Defesa, CD de Técnica e validações automáticas.</p>
-          </article>
-          <article class="module-card" data-open-tab="rules">
+          </a>
+          <a class="module-card" href="#">
             <span>02</span>
             <h2>Regras</h2>
             <p>Referência rápida para fórmulas, travas, origem, especialização e recursos derivados.</p>
-          </article>
-          <article class="module-card" data-open-tab="combat">
+          </a>
+          <a class="module-card" href="#">
             <span>03</span>
             <h2>Combate</h2>
             <p>Resumo de ações, iniciativa, rituais, dano na alma e fluxo de resolução em cena.</p>
-          </article>
-          <article class="module-card" data-open-tab="export">
+          </a>
+          <a class="module-card" href="#">
             <span>04</span>
             <h2>Arquivo</h2>
             <p>Exportação em JSON compatível com a estrutura do SYSTEM-RULES.md.</p>
-          </article>
+          </a>
         </section>
-      </section>
-
-      <section class="tab-panel" id="builder">
-        <section class="sheet-grid">
-          <aside class="character-column">
-            <section class="identity-line">
-              <div class="portrait" aria-hidden="true"></div>
-              <div class="identity-fields">
-                <label>Personagem <input id="name" value="Investigador Sem Nome" autocomplete="off" /></label>
-                <label>Origem <select id="origin"></select></label>
-              </div>
-            </section>
-
-            <section class="attribute-orbit" aria-label="Atributos">
-              <button class="orbit-edit" id="randomizeBtn" type="button" title="Gerar ficha">✦</button>
-              <div class="orbit-core">Atributos</div>
-              <div class="orbit-node orbit-top" data-attr="destreza"></div>
-              <div class="orbit-node orbit-left" data-attr="forca"></div>
-              <div class="orbit-node orbit-right" data-attr="inteligencia"></div>
-              <div class="orbit-node orbit-bottom-left" data-attr="presenca"></div>
-              <div class="orbit-node orbit-bottom-right" data-attr="constituicao"></div>
-              <div class="orbit-node orbit-hidden" data-attr="sabedoria"></div>
-            </section>
-
-            <section class="mini-stats">
-              <label>Nível <input id="level" type="number" min="1" max="20" value="1" /></label>
-              <label>XP <input id="xp" type="number" min="0" value="0" /></label>
-              <label>Grau <output id="gradeBadge">4° grau</output></label>
-            </section>
-            <p class="point-buy" id="pointBuy">Point Buy: 17 restantes</p>
-
-            <section class="resource-stack">
-              <div class="resource red"><span>Vida</span><strong id="hp">0 / 0</strong></div>
-              <div class="resource violet"><span id="energyLabel">PE</span><strong id="energy">0 / 0</strong></div>
-              <div class="resource amber"><span>Integridade</span><strong id="integrity">0 / 0</strong></div>
-            </section>
-
-            <section class="defense-row">
-              <div class="shield"><strong id="defense">10</strong></div>
-              <div>
-                <span>Defesa</span>
-                <small id="defenseFormula">10 + DES + nível</small>
-              </div>
-              <label>Iniciativa <output id="initiative">+0</output></label>
-            </section>
-
-            <section class="line-fields">
-              <label>Especialização <select id="specialization"></select></label>
-              <label>Atributo da técnica <select id="techAttr"></select></label>
-              <label>Percepção treinada <select id="perceptionTrained"><option value="no">Não</option><option value="yes">Sim</option></select></label>
-            </section>
-          </aside>
-
-          <section class="skills-column">
-            <div class="column-head">
-              <div>
-                <p class="kicker">Bônus e testes</p>
-                <h1>Perícias</h1>
-              </div>
-              <span id="levelTrace">Nível 1 · BT +2</span>
-            </div>
-            <div class="skill-table-head">
-              <span>Perícia</span>
-              <span>Atr</span>
-              <span>Bônus</span>
-              <span>Treino</span>
-            </div>
-            <div class="skill-list" id="skillList"></div>
-          </section>
-
-          <section class="details-column">
-            <div class="details-actions">
-              <button class="ghost-button" type="button">Personalização</button>
-              <button class="icon-button" type="button" title="Compartilhar">⌁</button>
-              <button class="icon-button" type="button" title="Configurações">⚙</button>
-            </div>
-
-            <nav class="detail-tabs" aria-label="Detalhes da ficha">
-              <button class="detail-tab is-active" data-detail="abilities">Habilidades</button>
-              <button class="detail-tab" data-detail="stats">Status</button>
-              <button class="detail-tab" data-detail="inventory">Inventário</button>
-              <button class="detail-tab" data-detail="notes">Descrição</button>
-            </nav>
-
-            <section class="detail-panel is-active" id="abilities">
-              <div class="filter-line">
-                <input placeholder="Filtrar habilidades" />
-                <button class="add-button" type="button">Adicionar</button>
-              </div>
-              <button class="new-button" type="button">Nova habilidade</button>
-              <div class="summary-grid" id="summaryCards"></div>
-              <section class="alerts" id="warnings" aria-live="polite"></section>
-            </section>
-
-            <section class="detail-panel" id="stats">
-              <div class="status-cards">
-                <article><span>Atenção</span><strong id="attention">0</strong></article>
-                <article><span>CD Técnica</span><strong id="techDc">0</strong></article>
-                <article><span>Alma</span><div class="meter"><i id="soulFill"></i></div></article>
-              </div>
-              <div class="attribute-grid" id="attributes"></div>
-            </section>
-
-            <section class="detail-panel" id="inventory">
-              <div class="summary-grid" id="inventoryPreview"></div>
-            </section>
-
-            <section class="detail-panel" id="notes">
-              <p class="muted-text">Use a aba Arquivo para copiar o JSON completo da ficha. Esta área fica reservada para traços, ideais, ligações, complicações e domínio inato.</p>
-            </section>
-          </section>
-        </section>
-      </section>
-
-      <section class="tab-panel" id="rules">
-        <header class="page-head">
-          <p class="kicker">Referência rápida</p>
-          <h1>Fórmulas e travas</h1>
-        </header>
-        <div class="rule-grid">
-          <article class="panel"><h2>Atributos</h2><p>Modificador = piso((atributo - 10) / 2). Qualquer mudança recalcula derivados.</p></article>
-          <article class="panel"><h2>Defesa</h2><p>10 + Mod(DES) + piso(nível / 2) + bônus. Restringidos podem somar FOR ou CON.</p></article>
-          <article class="panel"><h2>Atenção</h2><p>10 + Mod(SAB) + piso(nível / 2) + BT se Percepção estiver treinada.</p></article>
-          <article class="panel"><h2>Energia</h2><p>PE por nível vem da especialização. Técnica, Controlador e Suporte somam o modificador chave uma vez.</p></article>
-          <article class="panel"><h2>Restringido</h2><p>Não usa PE. Estamina = 4 × nível, sem aptidões amaldiçoadas e sem multiclasse.</p></article>
-          <article class="panel"><h2>Validações</h2><p>Sem energia negativa, atributos faltantes, combinações inválidas ou técnica proibida.</p></article>
-        </div>
-      </section>
-
-      <section class="tab-panel" id="combat">
-        <header class="page-head">
-          <p class="kicker">Protocolo de campo</p>
-          <h1>Combate</h1>
-        </header>
-        <div class="flow-grid">
-          <article class="panel"><span>01</span><h2>Iniciativa</h2><p>Rola Mod(DES) + bônus. Empate usa maior Mod(DES), depois novo teste.</p></article>
-          <article class="panel"><span>02</span><h2>Ações</h2><p>1 comum, 1 bônus, 1 movimento, ações livres e 1 reação por rodada.</p></article>
-          <article class="panel"><span>03</span><h2>Rituais</h2><p>Mais tempo de conjuração compra melhorias e pode exigir Prestidigitação.</p></article>
-          <article class="panel"><span>04</span><h2>Alma</h2><p>Dano na Alma reduz PV atual e máximo, ignorando defesas comuns.</p></article>
-        </div>
-        <section class="panel">
-          <h2>Ações</h2>
-          <div class="summary-grid" id="actionList"></div>
-        </section>
-      </section>
-
-      <section class="tab-panel" id="export">
-        <header class="page-head with-action">
-          <div>
-            <p class="kicker">Estrutura de dados</p>
-            <h1>JSON da ficha</h1>
-          </div>
-          <button class="ghost-button" id="copyBtn" type="button">Copiar JSON</button>
-        </header>
-        <pre class="json-box" id="jsonBox"></pre>
       </section>
     </main>
-
-    <script src="rules-data.js"></script>
-    <script src="app.js"></script>
   </body>
 </html>

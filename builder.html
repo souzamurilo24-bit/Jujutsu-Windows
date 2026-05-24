@@ -1,0 +1,152 @@
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Feiticeiros & Maldições | Agentes</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <canvas id="veil" aria-hidden="true"></canvas>
+
+    <header class="topbar">
+      <a class="brand" href="index.html" aria-label="Feiticeiros & Maldições">
+        <span class="brand-mark">FM</span>
+        <span class="brand-name"><i>F</i><i>M</i><i>:</i><i>C</i><i>R</i><i>I</i><i>S</i></span>
+      </a>
+      <nav class="nav" aria-label="Seções">
+        <a class="nav-button" href="index.html">Início</a>
+        <button class="nav-button is-active" data-tab="builder">Agentes</button>
+      </nav>
+      <button class="profile-dot" type="button" aria-label="Perfil"></button>
+    </header>
+
+    <main class="app-shell">
+      <section class="tab-panel is-active" id="builder-list">
+        <header class="page-head">
+          <p class="kicker">Agentes</p>
+          <h1>Gerenciar feiticeiros</h1>
+        </header>
+        <div class="builder-start">
+          <p>Abra a ficha do seu próximo agente e comece a montar seu feiticeiro com base no sistema.</p>
+          <button class="primary-button" type="button" id="newAgentBtn">Novo feiticeiro</button>
+        </div>
+      </section>
+
+      <section class="tab-panel" id="builder">
+        <section class="sheet-grid">
+          <aside class="character-column">
+            <section class="identity-line">
+              <div class="portrait" aria-hidden="true"></div>
+              <div class="identity-fields">
+                <label>Personagem <input id="name" value="Investigador Sem Nome" autocomplete="off" /></label>
+                <label>Origem <select id="origin"></select></label>
+              </div>
+            </section>
+
+            <section class="attribute-orbit" aria-label="Atributos">
+              <button class="orbit-edit" id="randomizeBtn" type="button" title="Gerar ficha">✦</button>
+              <div class="orbit-core">Atributos</div>
+              <div class="orbit-node orbit-top" data-attr="destreza"></div>
+              <div class="orbit-node orbit-left" data-attr="forca"></div>
+              <div class="orbit-node orbit-right" data-attr="inteligencia"></div>
+              <div class="orbit-node orbit-bottom-left" data-attr="presenca"></div>
+              <div class="orbit-node orbit-bottom-right" data-attr="constituicao"></div>
+              <div class="orbit-node orbit-hidden" data-attr="sabedoria"></div>
+            </section>
+
+            <section class="mini-stats">
+              <label>Nível <input id="level" type="number" min="1" max="20" value="1" /></label>
+              <label>XP <input id="xp" type="number" min="0" value="0" /></label>
+              <label>Grau <output id="gradeBadge">4° grau</output></label>
+            </section>
+            <p class="point-buy" id="pointBuy">Point Buy: 17 restantes</p>
+
+            <section class="resource-stack">
+              <div class="resource red"><span>Vida</span><strong id="hp">0 / 0</strong></div>
+              <div class="resource violet"><span id="energyLabel">PE</span><strong id="energy">0 / 0</strong></div>
+              <div class="resource amber"><span>Integridade</span><strong id="integrity">0 / 0</strong></div>
+            </section>
+
+            <section class="defense-row">
+              <div class="shield"><strong id="defense">10</strong></div>
+              <div>
+                <span>Defesa</span>
+                <small id="defenseFormula">10 + DES + nível</small>
+              </div>
+              <label>Iniciativa <output id="initiative">+0</output></label>
+            </section>
+
+            <section class="line-fields">
+              <label>Especialização <select id="specialization"></select></label>
+              <label>Atributo da técnica <select id="techAttr"></select></label>
+              <label>Percepção treinada <select id="perceptionTrained"><option value="no">Não</option><option value="yes">Sim</option></select></label>
+            </section>
+          </aside>
+
+          <section class="skills-column">
+            <div class="column-head">
+              <div>
+                <p class="kicker">Bônus e testes</p>
+                <h1>Perícias</h1>
+              </div>
+              <span id="levelTrace">Nível 1 · BT +2</span>
+            </div>
+            <div class="skill-table-head">
+              <span>Perícia</span>
+              <span>Atr</span>
+              <span>Bônus</span>
+              <span>Treino</span>
+            </div>
+            <div class="skill-list" id="skillList"></div>
+          </section>
+
+          <section class="details-column">
+            <div class="details-actions">
+              <button class="ghost-button" type="button">Personalização</button>
+              <button class="icon-button" type="button" title="Compartilhar">⌁</button>
+              <button class="icon-button" type="button" title="Configurações">⚙</button>
+            </div>
+
+            <nav class="detail-tabs" aria-label="Detalhes da ficha">
+              <button class="detail-tab is-active" data-detail="abilities">Habilidades</button>
+              <button class="detail-tab" data-detail="stats">Status</button>
+              <button class="detail-tab" data-detail="inventory">Inventário</button>
+              <button class="detail-tab" data-detail="notes">Descrição</button>
+            </nav>
+
+            <section class="detail-panel is-active" id="abilities">
+              <div class="filter-line">
+                <input placeholder="Filtrar habilidades" />
+                <button class="add-button" type="button">Adicionar</button>
+              </div>
+              <button class="new-button" type="button">Nova habilidade</button>
+              <div class="summary-grid" id="summaryCards"></div>
+              <section class="alerts" id="warnings" aria-live="polite"></section>
+            </section>
+
+            <section class="detail-panel" id="stats">
+              <div class="status-cards">
+                <article><span>Atenção</span><strong id="attention">0</strong></article>
+                <article><span>CD Técnica</span><strong id="techDc">0</strong></article>
+                <article><span>Alma</span><div class="meter"><i id="soulFill"></i></div></article>
+              </div>
+              <div class="attribute-grid" id="attributes"></div>
+            </section>
+
+            <section class="detail-panel" id="inventory">
+              <div class="summary-grid" id="inventoryPreview"></div>
+            </section>
+
+            <section class="detail-panel" id="notes">
+              <p class="muted-text">Use a aba Arquivo para copiar o JSON completo da ficha. Esta área fica reservada para traços, ideais, ligações, complicações e domínio inato.</p>
+            </section>
+          </section>
+        </section>
+      </section>
+    </main>
+
+    <script src="rules-data.js"></script>
+    <script src="app.js"></script>
+  </body>
+</html>

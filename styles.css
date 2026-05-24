@@ -898,6 +898,24 @@ h2 {
   margin-bottom: 18px;
 }
 
+.builder-start {
+  max-width: 680px;
+  margin: 0 auto;
+  padding: 42px 34px;
+  border: 1px solid var(--line);
+  border-radius: 18px;
+  background: var(--surface);
+  box-shadow: 0 26px 70px rgba(0, 0, 0, 0.18);
+  text-align: center;
+}
+
+.builder-start p {
+  max-width: 520px;
+  margin: 0 auto 28px;
+  color: var(--muted);
+  line-height: 1.7;
+}
+
 .page-head.with-action {
   display: flex;
   justify-content: space-between;

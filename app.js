@@ -174,6 +174,18 @@ function characterJson(calc, warnings) {
   };
 }
 
+function resetCharacter() {
+  $("#name").value = "Investigador Sem Nome";
+  $("#level").value = 1;
+  $("#xp").value = 0;
+  $("#origin").value = "inato";
+  $("#specialization").value = "lutador";
+  $("#techAttr").value = "destreza";
+  $("#perceptionTrained").value = "no";
+  Object.assign(state.attrs, { forca: 15, destreza: 14, constituicao: 13, inteligencia: 12, sabedoria: 10, presenca: 8 });
+  render();
+}
+
 function renderOptions() {
   $("#origin").innerHTML = Object.entries(origins).map(([value, item]) => `<option value="${value}">${item.label}</option>`).join("");
   $("#specialization").innerHTML = Object.entries(specs).map(([value, item]) => `<option value="${value}">${item.label}</option>`).join("");
@@ -297,7 +309,7 @@ function bind() {
     $(selector).addEventListener("change", render);
   });
 
-  $$(".nav-button").forEach((button) => {
+  $$(".nav-button[data-tab]").forEach((button) => {
     button.addEventListener("click", () => {
       openTab(button.dataset.tab);
     });
@@ -306,6 +318,14 @@ function bind() {
   $$("[data-open-tab]").forEach((button) => {
     button.addEventListener("click", () => openTab(button.dataset.openTab));
   });
+
+  const newAgentBtn = $("#newAgentBtn");
+  if (newAgentBtn) {
+    newAgentBtn.addEventListener("click", () => {
+      resetCharacter();
+      openTab("builder");
+    });
+  }
 
   $$(".detail-tab").forEach((button) => {
     button.addEventListener("click", () => {
@@ -340,7 +360,8 @@ function bind() {
 }
 
 function openTab(tabId) {
-  $$(".nav-button").forEach((item) => item.classList.toggle("is-active", item.dataset.tab === tabId));
+  const activeNav = tabId === "builder" || tabId === "builder-list" ? "builder" : tabId;
+  $$(".nav-button").forEach((item) => item.classList.toggle("is-active", item.dataset.tab === activeNav));
   $$(".tab-panel").forEach((item) => item.classList.toggle("is-active", item.id === tabId));
 }
 
