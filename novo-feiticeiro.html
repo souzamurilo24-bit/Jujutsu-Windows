@@ -29,9 +29,10 @@
       </section>
 
       <div class="wizard-steps" aria-label="Etapas de criação">
-        <button class="wizard-step is-active" type="button" data-step="1">1. Identidade</button>
-        <button class="wizard-step" type="button" data-step="2">2. Atributos</button>
-        <button class="wizard-step" type="button" data-step="3">3. Rever</button>
+        <button class="wizard-step is-active" type="button" data-step="1">Origem</button>
+        <button class="wizard-step" type="button" data-step="2">Atributos</button>
+        <button class="wizard-step" type="button" data-step="3">Classe</button>
+        <button class="wizard-step" type="button" data-step="4">Toques Finais</button>
       </div>
 
       <section class="wizard-panel is-active" id="wizard-step-1">
@@ -57,6 +58,24 @@
       </section>
 
       <section class="wizard-panel" id="wizard-step-2">
+        <div class="attribute-page">
+          <div class="attribute-copy">
+            <p class="kicker">Atributos</p>
+            <h2>Distribua os pontos do seu agente</h2>
+            <p>Quando você cria um personagem, todos os seus atributos começam em 1 e você recebe 4 pontos para distribuir entre eles como quiser. Você também pode reduzir um atributo para 0 para receber 1 ponto adicional. O valor máximo inicial que você pode ter em cada atributo é 3.</p>
+            <div class="attribute-summary">
+              <span>Pontos restantes</span>
+              <strong id="pointsLeft">4</strong>
+            </div>
+          </div>
+
+          <div class="attribute-wheel" id="attributeWheel"></div>
+        </div>
+
+        <section class="attribute-list" id="attributeList"></section>
+      </section>
+
+      <section class="wizard-panel" id="wizard-step-3">
         <div class="form-grid">
           <label>Nome
             <input id="agentName" type="text" placeholder="Nome do feiticeiro" value="Investigador Sem Nome" />
@@ -64,16 +83,10 @@
           <label>Especialização
             <select id="agentSpec"></select>
           </label>
-          <label>Força <input id="attrForca" type="number" min="0" max="30" value="15" /></label>
-          <label>Destreza <input id="attrDestreza" type="number" min="0" max="30" value="14" /></label>
-          <label>Constituição <input id="attrConstituicao" type="number" min="0" max="30" value="13" /></label>
-          <label>Inteligência <input id="attrInteligencia" type="number" min="0" max="30" value="12" /></label>
-          <label>Sabedoria <input id="attrSabedoria" type="number" min="0" max="30" value="10" /></label>
-          <label>Presença <input id="attrPresenca" type="number" min="0" max="30" value="8" /></label>
         </div>
       </section>
 
-      <section class="wizard-panel" id="wizard-step-3">
+      <section class="wizard-panel" id="wizard-step-4">
         <div class="review-card" id="reviewCard"></div>
       </section>
 
@@ -116,13 +129,14 @@
         name: 'Investigador Sem Nome',
         origin: 'inato',
         spec: 'lutador',
+        points: 4,
         attrs: {
-          forca: 15,
-          destreza: 14,
-          constituicao: 13,
-          inteligencia: 12,
-          sabedoria: 10,
-          presenca: 8,
+          forca: 1,
+          destreza: 1,
+          constituicao: 1,
+          inteligencia: 1,
+          sabedoria: 1,
+          presenca: 1,
         },
       };
 
@@ -131,6 +145,7 @@
         1: document.getElementById('wizard-step-1'),
         2: document.getElementById('wizard-step-2'),
         3: document.getElementById('wizard-step-3'),
+        4: document.getElementById('wizard-step-4'),
         complete: document.getElementById('wizard-complete'),
       };
       const nextBtn = document.getElementById('nextBtn');
@@ -174,15 +189,68 @@
         specSelect.innerHTML = specs.map(item => `<option value="${item.value}">${item.label}</option>`).join('');
       }
 
+      function renderAttributes() {
+        const wheel = document.getElementById('attributeWheel');
+        const list = document.getElementById('attributeList');
+        const pointsLeft = document.getElementById('pointsLeft');
+        pointsLeft.textContent = state.points;
+
+        const nodes = [
+          { attr: 'forca', label: 'Força' },
+          { attr: 'destreza', label: 'Destreza' },
+          { attr: 'inteligencia', label: 'Inteligência' },
+          { attr: 'presenca', label: 'Presença' },
+          { attr: 'constituicao', label: 'Constituição' },
+          { attr: 'sabedoria', label: 'Sabedoria' },
+        ];
+
+        wheel.innerHTML = nodes
+          .map((node, index) => {
+            const angle = (index / nodes.length) * 360;
+            return `
+              <button class="attribute-node" type="button" data-attr="${node.attr}" style="--angle:${angle}deg;">
+                <strong>${state.attrs[node.attr]}</strong>
+                <span>${node.label}</span>
+              </button>
+            `;
+          })
+          .join('');
+
+        list.innerHTML = nodes
+          .map((node) => `
+            <div class="attribute-row">
+              <div>
+                <strong>${node.label}</strong>
+                <span>${state.attrs[node.attr]}</span>
+              </div>
+              <div class="attribute-buttons">
+                <button type="button" data-action="decrement" data-attr="${node.attr}">-</button>
+                <button type="button" data-action="increment" data-attr="${node.attr}">+</button>
+              </div>
+            </div>
+          `)
+          .join('');
+
+        list.querySelectorAll('button').forEach((button) => {
+          button.addEventListener('click', () => {
+            const attr = button.dataset.attr;
+            const action = button.dataset.action;
+            if (action === 'increment' && state.attrs[attr] < 3 && state.points > 0) {
+              state.attrs[attr] += 1;
+              state.points -= 1;
+            }
+            if (action === 'decrement' && state.attrs[attr] > 0) {
+              state.attrs[attr] -= 1;
+              state.points += 1;
+            }
+            renderAttributes();
+          });
+        });
+      }
+
       function syncState() {
         state.name = document.getElementById('agentName').value || 'Investigador Sem Nome';
         state.spec = document.getElementById('agentSpec').value;
-        state.attrs.forca = Number(document.getElementById('attrForca').value) || 0;
-        state.attrs.destreza = Number(document.getElementById('attrDestreza').value) || 0;
-        state.attrs.constituicao = Number(document.getElementById('attrConstituicao').value) || 0;
-        state.attrs.inteligencia = Number(document.getElementById('attrInteligencia').value) || 0;
-        state.attrs.sabedoria = Number(document.getElementById('attrSabedoria').value) || 0;
-        state.attrs.presenca = Number(document.getElementById('attrPresenca').value) || 0;
       }
 
       function renderReview() {
@@ -211,7 +279,9 @@
         panels[step]?.classList.add('is-active');
         stepButtons.forEach(button => button.classList.toggle('is-active', Number(button.dataset.step) === step));
         backBtn.disabled = step === 1;
-        nextBtn.textContent = step === 3 ? 'Criar feiticeiro' : 'Próximo';
+        nextBtn.textContent = step === 4 ? 'Criar feiticeiro' : 'Próximo';
+        if (step === 2) renderAttributes();
+        if (step === 4) renderReview();
       }
 
       function createCharacter() {
@@ -229,9 +299,8 @@
       }
 
       nextBtn.addEventListener('click', () => {
-        if (state.step < 3) {
+        if (state.step < 4) {
           syncState();
-          if (state.step === 2) renderReview();
           showStep(state.step + 1);
         } else {
           syncState();
@@ -250,7 +319,10 @@
         button.addEventListener('click', () => {
           const targetStep = Number(button.dataset.step);
           if (targetStep <= state.step + 1) {
-            if (targetStep === 3) {
+            if (targetStep === 2) {
+              renderAttributes();
+            }
+            if (targetStep === 4) {
               syncState();
               renderReview();
             }
