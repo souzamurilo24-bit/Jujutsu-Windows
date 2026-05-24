@@ -35,21 +35,35 @@
       </div>
 
       <section class="wizard-panel is-active" id="wizard-step-1">
-        <div class="form-grid">
-          <label>Nome
-            <input id="agentName" type="text" placeholder="Nome do feiticeiro" value="Investigador Sem Nome" />
-          </label>
-          <label>Origem
-            <select id="agentOrigin"></select>
-          </label>
-          <label>Especialização
-            <select id="agentSpec"></select>
-          </label>
+        <div class="origin-header">
+          <p class="kicker">Origem</p>
+          <h2>Escolha a origem do seu feiticeiro</h2>
+          <p>O que seu personagem fazia antes de se envolver com o paranormal? Cada origem traz perícias treinadas e uma vantagem temática para a criação.</p>
         </div>
+
+        <div class="origin-banner">
+          <div>
+            <strong>Conteúdo oficial de Ordem Paranormal.</strong>
+            <span>Veja mais na página oficial e mantenha o estilo da sua campanha.</span>
+          </div>
+          <a href="#">Ver conteúdo</a>
+        </div>
+
+        <div class="origin-search">
+          <input id="originSearch" type="search" placeholder="Buscar" />
+        </div>
+
+        <div class="origin-list" id="originList"></div>
       </section>
 
       <section class="wizard-panel" id="wizard-step-2">
         <div class="form-grid">
+          <label>Nome
+            <input id="agentName" type="text" placeholder="Nome do feiticeiro" value="Investigador Sem Nome" />
+          </label>
+          <label>Especialização
+            <select id="agentSpec"></select>
+          </label>
           <label>Força <input id="attrForca" type="number" min="0" max="30" value="15" /></label>
           <label>Destreza <input id="attrDestreza" type="number" min="0" max="30" value="14" /></label>
           <label>Constituição <input id="attrConstituicao" type="number" min="0" max="30" value="13" /></label>
@@ -79,13 +93,13 @@
 
     <script>
       const origins = [
-        { value: 'inato', label: 'Inato' },
-        { value: 'herdado', label: 'Herdado' },
-        { value: 'derivado', label: 'Derivado' },
-        { value: 'restringido', label: 'Restringido' },
-        { value: 'feto', label: 'Feto Amaldiçoado Híbrido' },
-        { value: 'semTecnica', label: 'Sem Técnica' },
-        { value: 'corpoMutante', label: 'Corpo Amaldiçoado Mutante' },
+        { value: 'inato', label: 'Inato', title: 'Vida normal antes do paranormal', description: 'Recebe +2 em um atributo, +1 em outro, talento natural e marca registrada.', trained: 'Ciências e Investigação', power: 'Saber é Poder: gaste 2 PE para +5 em um teste de Intelecto.' },
+        { value: 'herdado', label: 'Herdado', title: 'Linhagem de clã ou herança ancestral', description: 'Ta ligado às técnicas de um clã e traz disciplina e legado.', trained: 'Atletismo e Tática', power: 'Domínio de Clã: +2 em testes de controle sobrenatural.' },
+        { value: 'derivado', label: 'Derivado', title: 'Energia antinatural e origem inesperada', description: 'Uma marca sombria e um crescimento acelerado pela maldição.', trained: 'Enganação e Ocultismo', power: 'Pulso Maldito: adicione +2 em um ataque ao custo de 1 PE.' },
+        { value: 'restringido', label: 'Restringido', title: 'Sem energia amaldiçoada', description: 'Vigor absoluto, estamina em vez de PE e foco físico extremo.', trained: 'Fortitude e Luta', power: 'Fúria Restritiva: +1 em defesa ao custo de 1 estamina.' },
+        { value: 'feto', label: 'Feto Amaldiçoado Híbrido', title: 'Corpo híbrido e origem monstruosa', description: 'Uma origem horrorosa que concede resistência e traços únicos.', trained: 'Sobrevivência e Percepção', power: 'Visão do Horror: vantagem em testes contra criaturas aberrantes.' },
+        { value: 'semTecnica', label: 'Sem Técnica', title: 'Ainda sem técnica própria', description: 'Concentra-se em estudo e perícias enquanto não domina uma técnica inicial.', trained: 'Investigação e Religião', power: 'Estudo Intenso: +2 em um teste de perícia após preparação.' },
+        { value: 'corpoMutante', label: 'Corpo Amaldiçoado Mutante', title: 'Forma sintética e mutação consciente', description: 'Mutação abrupta com múltiplos núcleos e dons variados.', trained: 'Tecnologia e Ciência', power: 'Forma Mutante: +1 em qualquer atributo por 1 rodada.' },
       ];
 
       const specs = [
@@ -123,16 +137,45 @@
       const backBtn = document.getElementById('backBtn');
       const reviewCard = document.getElementById('reviewCard');
 
+      function renderOriginList(filter = '') {
+        const query = filter.trim().toLowerCase();
+        const container = document.getElementById('originList');
+        container.innerHTML = origins
+          .filter(item => item.label.toLowerCase().includes(query) || item.title.toLowerCase().includes(query) || item.description.toLowerCase().includes(query))
+          .map(item => `
+            <article class="origin-card ${state.origin === item.value ? 'is-selected' : ''}" data-origin="${item.value}">
+              <button class="origin-head" type="button" aria-expanded="false">
+                <div>
+                  <span class="origin-label">${item.label}</span>
+                  <strong>${item.title}</strong>
+                </div>
+                <span class="origin-action">Escolher</span>
+              </button>
+              <div class="origin-details" aria-hidden="true">
+                <p>${item.description}</p>
+                <p><strong>Perícias treinadas:</strong> ${item.trained}</p>
+                <p><strong>Poder da origem:</strong> ${item.power}</p>
+              </div>
+            </article>
+          `)
+          .join('');
+
+        container.querySelectorAll('.origin-card').forEach(card => {
+          const button = card.querySelector('.origin-head');
+          button.addEventListener('click', () => {
+            state.origin = card.dataset.origin;
+            renderOriginList(filter);
+          });
+        });
+      }
+
       function populateOptions() {
-        const originSelect = document.getElementById('agentOrigin');
         const specSelect = document.getElementById('agentSpec');
-        originSelect.innerHTML = origins.map(item => `<option value="${item.value}">${item.label}</option>`).join('');
         specSelect.innerHTML = specs.map(item => `<option value="${item.value}">${item.label}</option>`).join('');
       }
 
       function syncState() {
         state.name = document.getElementById('agentName').value || 'Investigador Sem Nome';
-        state.origin = document.getElementById('agentOrigin').value;
         state.spec = document.getElementById('agentSpec').value;
         state.attrs.forca = Number(document.getElementById('attrForca').value) || 0;
         state.attrs.destreza = Number(document.getElementById('attrDestreza').value) || 0;
@@ -217,6 +260,8 @@
       });
 
       populateOptions();
+      document.getElementById('originSearch').addEventListener('input', (event) => renderOriginList(event.target.value));
+      renderOriginList();
       showStep(1);
     </script>
   </body>

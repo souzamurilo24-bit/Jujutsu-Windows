@@ -382,6 +382,119 @@ select:focus {
   display: block;
 }
 
+.origin-header {
+  margin-bottom: 20px;
+}
+
+.origin-header h2 {
+  margin: 10px 0 8px;
+  font-size: 1.8rem;
+}
+
+.origin-banner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 14px;
+  padding: 16px 18px;
+  margin-bottom: 18px;
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.04);
+}
+
+.origin-banner strong {
+  display: block;
+  margin-bottom: 6px;
+}
+
+.origin-banner a {
+  color: var(--violet);
+  text-decoration: none;
+  font-weight: 900;
+}
+
+.origin-search {
+  margin-bottom: 18px;
+}
+
+.origin-search input {
+  width: 100%;
+  min-height: 44px;
+  padding: 0 14px;
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  background: rgba(255, 255, 255, 0.03);
+}
+
+.origin-list {
+  display: grid;
+  gap: 14px;
+}
+
+.origin-card {
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  background: var(--surface-2);
+  overflow: hidden;
+}
+
+.origin-card.is-selected {
+  border-color: var(--violet);
+  box-shadow: 0 10px 30px rgba(141, 108, 255, 0.18);
+}
+
+.origin-head {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 18px;
+  border: 0;
+  background: transparent;
+  color: var(--text);
+  text-align: left;
+}
+
+.origin-label {
+  display: block;
+  color: var(--violet);
+  font-size: 0.85rem;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  margin-bottom: 4px;
+}
+
+.origin-head strong {
+  display: block;
+  font-size: 1rem;
+  font-weight: 900;
+}
+
+.origin-action {
+  color: var(--text);
+  background: linear-gradient(135deg, var(--violet), #b632e9);
+  border-radius: 999px;
+  padding: 10px 18px;
+  white-space: nowrap;
+}
+
+.origin-details {
+  padding: 0 18px 18px;
+  display: none;
+  color: var(--muted);
+}
+
+.origin-card.is-selected .origin-details {
+  display: block;
+}
+
+.origin-details p {
+  margin: 12px 0 0;
+  line-height: 1.6;
+}
+
 .form-grid {
   display: grid;
   gap: 14px;
