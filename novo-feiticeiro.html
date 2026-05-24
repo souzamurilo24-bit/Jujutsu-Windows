@@ -1,0 +1,223 @@
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Novo Feitiçeiro | Feiticeiros & Maldições</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <canvas id="veil" aria-hidden="true"></canvas>
+
+    <header class="topbar">
+      <a class="brand" href="index.html" aria-label="Feiticeiros & Maldições">
+        <span class="brand-mark">FM</span>
+        <span class="brand-name"><i>F</i><i>M</i><i>:</i><i>C</i><i>R</i><i>I</i><i>S</i></span>
+      </a>
+      <nav class="nav" aria-label="Seções">
+        <a class="nav-button" href="index.html">Início</a>
+        <a class="nav-button is-active" href="builder.html">Agentes</a>
+      </nav>
+      <button class="profile-dot" type="button" aria-label="Perfil"></button>
+    </header>
+
+    <main class="app-shell">
+      <section class="page-head">
+        <p class="kicker">Novo Feitiçeiro</p>
+        <h1>Passo a passo de criação</h1>
+        <p>Complete cada etapa para criar seu agente e retornar à lista de feiticeiros.</p>
+      </section>
+
+      <div class="wizard-steps" aria-label="Etapas de criação">
+        <button class="wizard-step is-active" type="button" data-step="1">1. Identidade</button>
+        <button class="wizard-step" type="button" data-step="2">2. Atributos</button>
+        <button class="wizard-step" type="button" data-step="3">3. Rever</button>
+      </div>
+
+      <section class="wizard-panel is-active" id="wizard-step-1">
+        <div class="form-grid">
+          <label>Nome
+            <input id="agentName" type="text" placeholder="Nome do feiticeiro" value="Investigador Sem Nome" />
+          </label>
+          <label>Origem
+            <select id="agentOrigin"></select>
+          </label>
+          <label>Especialização
+            <select id="agentSpec"></select>
+          </label>
+        </div>
+      </section>
+
+      <section class="wizard-panel" id="wizard-step-2">
+        <div class="form-grid">
+          <label>Força <input id="attrForca" type="number" min="0" max="30" value="15" /></label>
+          <label>Destreza <input id="attrDestreza" type="number" min="0" max="30" value="14" /></label>
+          <label>Constituição <input id="attrConstituicao" type="number" min="0" max="30" value="13" /></label>
+          <label>Inteligência <input id="attrInteligencia" type="number" min="0" max="30" value="12" /></label>
+          <label>Sabedoria <input id="attrSabedoria" type="number" min="0" max="30" value="10" /></label>
+          <label>Presença <input id="attrPresenca" type="number" min="0" max="30" value="8" /></label>
+        </div>
+      </section>
+
+      <section class="wizard-panel" id="wizard-step-3">
+        <div class="review-card" id="reviewCard"></div>
+      </section>
+
+      <section class="wizard-panel" id="wizard-complete">
+        <div class="complete-card">
+          <h2>Feitiçeiro criado com sucesso!</h2>
+          <p>O agente foi registrado e está pronto para ser usado na lista de Feitiçeiros.</p>
+          <a class="primary-button" href="builder.html">Voltar para Agentes</a>
+        </div>
+      </section>
+
+      <div class="form-actions">
+        <button class="ghost-button" type="button" id="backBtn" disabled>Voltar</button>
+        <button class="primary-button" type="button" id="nextBtn">Próximo</button>
+      </div>
+    </main>
+
+    <script>
+      const origins = [
+        { value: 'inato', label: 'Inato' },
+        { value: 'herdado', label: 'Herdado' },
+        { value: 'derivado', label: 'Derivado' },
+        { value: 'restringido', label: 'Restringido' },
+        { value: 'feto', label: 'Feto Amaldiçoado Híbrido' },
+        { value: 'semTecnica', label: 'Sem Técnica' },
+        { value: 'corpoMutante', label: 'Corpo Amaldiçoado Mutante' },
+      ];
+
+      const specs = [
+        { value: 'lutador', label: 'Lutador' },
+        { value: 'combate', label: 'Especialista em Combate' },
+        { value: 'tecnica', label: 'Especialista em Técnica' },
+        { value: 'controlador', label: 'Controlador' },
+        { value: 'suporte', label: 'Suporte' },
+        { value: 'restringido', label: 'Restringido' },
+      ];
+
+      const state = {
+        step: 1,
+        name: 'Investigador Sem Nome',
+        origin: 'inato',
+        spec: 'lutador',
+        attrs: {
+          forca: 15,
+          destreza: 14,
+          constituicao: 13,
+          inteligencia: 12,
+          sabedoria: 10,
+          presenca: 8,
+        },
+      };
+
+      const stepButtons = [...document.querySelectorAll('.wizard-step')];
+      const panels = {
+        1: document.getElementById('wizard-step-1'),
+        2: document.getElementById('wizard-step-2'),
+        3: document.getElementById('wizard-step-3'),
+        complete: document.getElementById('wizard-complete'),
+      };
+      const nextBtn = document.getElementById('nextBtn');
+      const backBtn = document.getElementById('backBtn');
+      const reviewCard = document.getElementById('reviewCard');
+
+      function populateOptions() {
+        const originSelect = document.getElementById('agentOrigin');
+        const specSelect = document.getElementById('agentSpec');
+        originSelect.innerHTML = origins.map(item => `<option value="${item.value}">${item.label}</option>`).join('');
+        specSelect.innerHTML = specs.map(item => `<option value="${item.value}">${item.label}</option>`).join('');
+      }
+
+      function syncState() {
+        state.name = document.getElementById('agentName').value || 'Investigador Sem Nome';
+        state.origin = document.getElementById('agentOrigin').value;
+        state.spec = document.getElementById('agentSpec').value;
+        state.attrs.forca = Number(document.getElementById('attrForca').value) || 0;
+        state.attrs.destreza = Number(document.getElementById('attrDestreza').value) || 0;
+        state.attrs.constituicao = Number(document.getElementById('attrConstituicao').value) || 0;
+        state.attrs.inteligencia = Number(document.getElementById('attrInteligencia').value) || 0;
+        state.attrs.sabedoria = Number(document.getElementById('attrSabedoria').value) || 0;
+        state.attrs.presenca = Number(document.getElementById('attrPresenca').value) || 0;
+      }
+
+      function renderReview() {
+        reviewCard.innerHTML = `
+          <h2>Confirme os dados do seu feiticeiro</h2>
+          <p><strong>Nome:</strong> ${state.name}</p>
+          <p><strong>Origem:</strong> ${origins.find(item => item.value === state.origin)?.label}</p>
+          <p><strong>Especialização:</strong> ${specs.find(item => item.value === state.spec)?.label}</p>
+          <div class="review-card">
+            <p><strong>Atributos</strong></p>
+            <ul style="margin: 0; padding-left: 18px; color: var(--muted);">
+              <li>Força: ${state.attrs.forca}</li>
+              <li>Destreza: ${state.attrs.destreza}</li>
+              <li>Constituição: ${state.attrs.constituicao}</li>
+              <li>Inteligência: ${state.attrs.inteligencia}</li>
+              <li>Sabedoria: ${state.attrs.sabedoria}</li>
+              <li>Presença: ${state.attrs.presenca}</li>
+            </ul>
+          </div>
+        `;
+      }
+
+      function showStep(step) {
+        state.step = step;
+        Object.values(panels).forEach(panel => panel.classList.remove('is-active'));
+        panels[step]?.classList.add('is-active');
+        stepButtons.forEach(button => button.classList.toggle('is-active', Number(button.dataset.step) === step));
+        backBtn.disabled = step === 1;
+        nextBtn.textContent = step === 3 ? 'Criar feiticeiro' : 'Próximo';
+      }
+
+      function createCharacter() {
+        const payload = {
+          nome: state.name,
+          origem: origins.find(item => item.value === state.origin)?.label,
+          especializacao: specs.find(item => item.value === state.spec)?.label,
+          atributos: { ...state.attrs },
+          criadoEm: new Date().toISOString(),
+        };
+        localStorage.setItem('ultimoFeiticeiro', JSON.stringify(payload));
+        panels.complete.classList.add('is-active');
+        nextBtn.disabled = true;
+        backBtn.disabled = true;
+      }
+
+      nextBtn.addEventListener('click', () => {
+        if (state.step < 3) {
+          syncState();
+          if (state.step === 2) renderReview();
+          showStep(state.step + 1);
+        } else {
+          syncState();
+          renderReview();
+          createCharacter();
+        }
+      });
+
+      backBtn.addEventListener('click', () => {
+        if (state.step > 1) {
+          showStep(state.step - 1);
+        }
+      });
+
+      stepButtons.forEach(button => {
+        button.addEventListener('click', () => {
+          const targetStep = Number(button.dataset.step);
+          if (targetStep <= state.step + 1) {
+            if (targetStep === 3) {
+              syncState();
+              renderReview();
+            }
+            showStep(targetStep);
+          }
+        });
+      });
+
+      populateOptions();
+      showStep(1);
+    </script>
+  </body>
+</html>
