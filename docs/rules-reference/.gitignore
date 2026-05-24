@@ -1,0 +1,11 @@
+# PDF and reference documents (local only)
+*.pdf
+*.PDF
+*.txt
+*.TXT
+*.doc
+*.docx
+
+# Keep this directory in git but ignore large reference files
+!.gitignore
+!README.md

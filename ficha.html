@@ -1,0 +1,583 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Ficha - CRIS</title>
+  <link rel="stylesheet" href="css/main.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    .sheet-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1rem;
+    }
+    
+    .sheet-header {
+      grid-column: 1 / -1;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    
+    .sheet-header h2 {
+      margin: 0;
+    }
+    
+    .spec-badges {
+      display: flex;
+      gap: 0.5rem;
+    }
+    
+    .badge {
+      padding: 0.35rem 0.75rem;
+      background: var(--accent-muted);
+      border-radius: var(--radius);
+      font-size: 0.85rem;
+    }
+    
+    .attr-display {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 0.75rem;
+    }
+    
+    .attr-box {
+      background: var(--bg-secondary);
+      border: 1px solid var(--card-border);
+      border-radius: var(--radius);
+      padding: 1rem;
+      text-align: center;
+    }
+    
+    .attr-box .attr-name {
+      font-size: 0.75rem;
+      color: var(--text-secondary);
+      margin-bottom: 0.25rem;
+    }
+    
+    .attr-box .attr-value {
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: var(--accent);
+    }
+    
+    .attr-box .attr-mod {
+      font-size: 0.85rem;
+      color: var(--text-secondary);
+    }
+    
+    .stats-row {
+      display: flex;
+      gap: 1rem;
+      margin-top: 1rem;
+    }
+    
+    .stat-box {
+      flex: 1;
+      background: var(--bg-secondary);
+      border: 1px solid var(--card-border);
+      border-radius: var(--radius);
+      padding: 1rem;
+      text-align: center;
+    }
+    
+    .stat-box .stat-label {
+      font-size: 0.75rem;
+      color: var(--text-secondary);
+    }
+    
+    .stat-box .stat-value {
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: var(--accent);
+    }
+    
+    .dice-section {
+      margin-top: 1.5rem;
+    }
+    
+    .dice-buttons {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 0.5rem;
+    }
+    
+    .dice-btn {
+      padding: 0.75rem;
+      background: var(--bg-secondary);
+      border: 1px solid var(--card-border);
+      border-radius: var(--radius);
+      color: var(--text-primary);
+      font-family: inherit;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.15s;
+    }
+    
+    .dice-btn:hover {
+      border-color: var(--accent);
+      background: var(--accent-muted);
+    }
+    
+    .roll-result {
+      margin-top: 1rem;
+      padding: 1rem;
+      background: var(--bg-secondary);
+      border-radius: var(--radius);
+      text-align: center;
+      min-height: 80px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+    
+    .roll-result .roll-total {
+      font-size: 2rem;
+      font-weight: 700;
+      color: var(--accent);
+    }
+    
+    .roll-result .roll-details {
+      font-size: 0.85rem;
+      color: var(--text-secondary);
+      margin-top: 0.25rem;
+    }
+    
+    .actions {
+      display: flex;
+      gap: 0.5rem;
+      margin-top: 1rem;
+    }
+    
+    .damage-calculator {
+      margin-top: 1rem;
+      padding: 1rem;
+      background: var(--bg-secondary);
+      border-radius: var(--radius);
+    }
+    
+    .damage-calculator h4 {
+      margin: 0 0 0.75rem;
+      color: var(--accent);
+    }
+    
+    .calc-row {
+      display: flex;
+      gap: 0.5rem;
+      align-items: center;
+      margin-bottom: 0.5rem;
+    }
+    
+    .calc-row input {
+      width: 80px;
+    }
+    
+    .hp-controls {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+    
+    .hp-controls button {
+      padding: 0.35rem 0.6rem;
+      font-size: 0.8rem;
+    }
+  </style>
+</head>
+<body>
+  <div class="layout-main">
+    <!-- Sidebar -->
+    <nav class="sidebar">
+      <div class="sidebar-header">
+        <h1>CRIS</h1>
+        <span class="tagline">Feiticeiros & Maldições</span>
+      </div>
+      
+      <div class="nav-links">
+        <a href="index.html" class="nav-link">
+          <span class="icon">🏠</span> Painel
+        </a>
+        <a href="regras.html" class="nav-link">
+          <span class="icon">📖</span> Regras
+        </a>
+        <a href="fichas-publicas.html" class="nav-link">
+          <span class="icon">🌐</span> Fichas Públicas
+        </a>
+        
+        <div class="nav-divider"></div>
+        
+        <a href="agentes.html" class="nav-link auth-only" style="display: none;">
+          <span class="icon">👥</span> Meus Agentes
+        </a>
+        <a href="nova-ficha.html" class="nav-link auth-only" style="display: none;">
+          <span class="icon">➕</span> Nova Ficha
+        </a>
+        
+        <div class="nav-divider"></div>
+        
+        <a href="login.html" class="nav-link guest-only" id="login-link">
+          <span class="icon">🔑</span> Entrar
+        </a>
+        <button class="nav-link auth-only" id="logout-btn" style="display: none;">
+          <span class="icon">🚪</span> Sair
+        </button>
+      </div>
+    </nav>
+
+    <!-- Main Content -->
+    <div class="layout-content">
+      <header class="top-bar">
+        <h2 class="page-title">📋 Ficha de Personagem</h2>
+      </header>
+      
+      <main class="layout-body">
+        <div id="loading">Carregando...</div>
+        
+        <div id="character-sheet" class="sheet-grid" style="display: none;">
+          <!-- Header -->
+          <div class="card sheet-header">
+            <div>
+              <h2 id="char-name">Nome do Personagem</h2>
+              <p class="text-muted" id="char-meta">Nível 1 | Inato | Lutador</p>
+            </div>
+            <div class="spec-badges" id="char-badges">
+              <span class="badge">Nível 1</span>
+            </div>
+          </div>
+          
+          <!-- Attributes -->
+          <div class="card">
+            <h3>Atributos</h3>
+            <div class="attr-display" id="attr-display">
+              <!-- JS fills this -->
+            </div>
+            <div class="stats-row">
+              <div class="stat-box">
+                <div class="stat-label">PV</div>
+                <div class="stat-value" id="hp-display">--</div>
+                <div class="hp-controls" id="hp-controls" style="display: none;">
+                  <button class="btn btn-sm" onclick="adjustHp(-1)">-1</button>
+                  <button class="btn btn-sm" onclick="adjustHp(-5)">-5</button>
+                  <button class="btn btn-sm" onclick="adjustHp(1)">+1</button>
+                  <button class="btn btn-sm" onclick="adjustHp(5)">+5</button>
+                </div>
+              </div>
+              <div class="stat-box" id="pe-box">
+                <div class="stat-label">PE</div>
+                <div class="stat-value" id="pe-display">--</div>
+                <div class="hp-controls" id="pe-controls" style="display: none;">
+                  <button class="btn btn-sm" onclick="adjustPe(-1)">-1</button>
+                  <button class="btn btn-sm" onclick="adjustPe(-5)">-5</button>
+                  <button class="btn btn-sm" onclick="adjustPe(1)">+1</button>
+                  <button class="btn btn-sm" onclick="adjustPe(5)">+5</button>
+                </div>
+              </div>
+              <div class="stat-box" id="stamina-box" style="display: none;">
+                <div class="stat-label">Estamina</div>
+                <div class="stat-value">∞</div>
+              </div>
+            </div>
+          </div>
+          
+          <!-- Dice Roller -->
+          <div class="card dice-section">
+            <h3>🎲 Rolador de Dados</h3>
+            <div class="dice-buttons">
+              <button class="dice-btn" onclick="rollDice(4)">d4</button>
+              <button class="dice-btn" onclick="rollDice(6)">d6</button>
+              <button class="dice-btn" onclick="rollDice(8)">d8</button>
+              <button class="dice-btn" onclick="rollDice(10)">d10</button>
+              <button class="dice-btn" onclick="rollDice(12)">d12</button>
+              <button class="dice-btn" onclick="rollDice(20)">d20</button>
+              <button class="dice-btn" onclick="rollDice(100)">d100</button>
+              <button class="dice-btn" onclick="rollCustom()">Custom</button>
+            </div>
+            <div class="roll-result" id="roll-result">
+              <span class="roll-details">Clique em um dado para rolar</span>
+            </div>
+          </div>
+          
+          <!-- Damage Calculator -->
+          <div class="card">
+            <h3>⚔️ Calculadora de Dano</h3>
+            <div class="damage-calculator">
+              <div class="calc-row">
+                <label>Dados:</label>
+                <input type="number" id="dmg-dice-count" class="input" value="1" min="1" max="50">
+                <select id="dmg-dice-type" class="input" style="width: auto;">
+                  <option value="4">d4</option>
+                  <option value="6">d6</option>
+                  <option value="8" selected>d8</option>
+                  <option value="10">d10</option>
+                  <option value="12">d12</option>
+                </select>
+                <span>+</span>
+                <input type="number" id="dmg-bonus" class="input" value="0" style="width: 60px;">
+              </div>
+              <div class="calc-row">
+                <label>Resistência (RD):</label>
+                <input type="number" id="dmg-rd" class="input" value="0" min="0">
+              </div>
+              <button class="btn btn-primary" onclick="calculateDamage()">Calcular Dano</button>
+              <div id="dmg-result" style="margin-top: 0.75rem; font-weight: 600; color: var(--accent);"></div>
+            </div>
+          </div>
+          
+          <!-- Character Info -->
+          <div class="card">
+            <h3>📊 Informações</h3>
+            <div id="char-info">
+              <p><strong>Origem:</strong> <span id="info-origin"></span></p>
+              <p id="info-clan-row" style="display: none;"><strong>Clã:</strong> <span id="info-clan"></span></p>
+              <p><strong>Especialização:</strong> <span id="info-spec"></span></p>
+              <p><strong>Atributo-Chave:</strong> <span id="info-key"></span></p>
+              <p><strong>Defesa:</strong> <span id="info-defense"></span></p>
+              <p><strong>CD Técnica:</strong> <span id="info-cd"></span></p>
+            </div>
+            
+            <div class="actions" id="owner-actions" style="display: none;">
+              <button class="btn btn-ghost" onclick="togglePublic()">
+                <span id="public-btn-text">🌐 Tornar Público</span>
+              </button>
+              <button class="btn btn-danger" onclick="deleteCharacter()">🗑️ Excluir</button>
+            </div>
+          </div>
+        </div>
+      </main>
+    </div>
+  </div>
+
+  <!-- Firebase -->
+  <script type="module">
+    import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js';
+    import { getAuth, onAuthStateChanged, signOut } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js';
+    import { getFirestore, doc, getDoc, updateDoc, deleteDoc } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js';
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyBxc2Qk2cK2V_75N6qQJQL4I1lM22jiiaw",
+      authDomain: "cris-feiticeiros-maldicoes.firebaseapp.com",
+      projectId: "cris-feiticeiros-maldicoes",
+      storageBucket: "cris-feiticeiros-maldicoes.appspot.com",
+      messagingSenderId: "142025569303",
+      appId: "1:142025569303:web:46a076e3b22fc9c2b6f85e"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+    const db = getFirestore(app);
+
+    const attrLabels = {
+      for: 'Força', agi: 'Destreza', con: 'Constituição',
+      int: 'Inteligência', sab: 'Sabedoria', pre: 'Presença'
+    };
+
+    const specLabels = {
+      lutador: 'Lutador', especialista_combate: 'Especialista em Combate',
+      especialista_tecnica: 'Especialista em Técnica', controlador: 'Controlador',
+      suporte: 'Suporte', restringido: 'Restringido'
+    };
+
+    const originLabels = {
+      inato: 'Inato', herdado: 'Herdado', derivado: 'Derivado',
+      restringido: 'Restringido', feto: 'Feto Amaldiçoado Híbrido', sem_tecnica: 'Sem Técnica'
+    };
+
+    let currentChar = null;
+    let charId = null;
+    let currentUser = null;
+    let isOwner = false;
+
+    onAuthStateChanged(auth, (user) => {
+      if (user) {
+        currentUser = user;
+        document.querySelectorAll('.auth-only').forEach(el => el.style.display = '');
+        document.querySelectorAll('.guest-only').forEach(el => el.style.display = 'none');
+      } else {
+        currentUser = null;
+        document.querySelectorAll('.auth-only').forEach(el => el.style.display = 'none');
+        document.querySelectorAll('.guest-only').forEach(el => el.style.display = '');
+      }
+      loadCharacter();
+    });
+
+    document.getElementById('logout-btn')?.addEventListener('click', async () => {
+      await signOut(auth);
+      window.location.href = 'index.html';
+    });
+
+    async function loadCharacter() {
+      const urlParams = new URLSearchParams(window.location.search);
+      charId = urlParams.get('id');
+      
+      if (!charId) {
+        document.getElementById('loading').textContent = 'ID da ficha não fornecido';
+        return;
+      }
+
+      try {
+        const docSnap = await getDoc(doc(db, 'characters', charId));
+        
+        if (!docSnap.exists()) {
+          document.getElementById('loading').textContent = 'Ficha não encontrada';
+          return;
+        }
+
+        currentChar = docSnap.data();
+        isOwner = currentUser && currentChar.uid === currentUser.uid;
+
+        renderCharacter();
+      } catch (error) {
+        console.error(error);
+        document.getElementById('loading').textContent = 'Erro ao carregar ficha';
+      }
+    }
+
+    function renderCharacter() {
+      document.getElementById('loading').style.display = 'none';
+      document.getElementById('character-sheet').style.display = 'grid';
+
+      // Header
+      document.getElementById('char-name').textContent = currentChar.name || 'Sem Nome';
+      document.getElementById('char-meta').textContent = 
+        `Nível ${currentChar.level} | ${originLabels[currentChar.origin]} | ${specLabels[currentChar.specialization]}`;
+      document.getElementById('char-badges').innerHTML = 
+        `<span class="badge">Nível ${currentChar.level}</span>` +
+        (currentChar.public ? '<span class="badge" style="background: var(--success);">🌐 Pública</span>' : '');
+
+      // Attributes
+      const attrDisplay = document.getElementById('attr-display');
+      attrDisplay.innerHTML = Object.entries(currentChar.attributes).map(([key, val]) => {
+        const mod = Math.floor((val - 10) / 2);
+        return `
+          <div class="attr-box">
+            <div class="attr-name">${attrLabels[key]}</div>
+            <div class="attr-value">${val}</div>
+            <div class="attr-mod">${mod >= 0 ? '+' : ''}${mod}</div>
+          </div>
+        `;
+      }).join('');
+
+      // HP/PE
+      document.getElementById('hp-display').textContent = `${currentChar.currentHp}/${currentChar.maxHp}`;
+      
+      if (currentChar.specialization === 'restringido') {
+        document.getElementById('pe-box').style.display = 'none';
+        document.getElementById('stamina-box').style.display = 'block';
+      } else {
+        document.getElementById('pe-box').style.display = 'block';
+        document.getElementById('stamina-box').style.display = 'none';
+        document.getElementById('pe-display').textContent = `${currentChar.currentPe}/${currentChar.maxPe}`;
+      }
+
+      // Owner controls
+      if (isOwner) {
+        document.getElementById('hp-controls').style.display = 'flex';
+        document.getElementById('pe-controls').style.display = currentChar.specialization === 'restringido' ? 'none' : 'flex';
+        document.getElementById('owner-actions').style.display = 'flex';
+        document.getElementById('public-btn-text').textContent = currentChar.public ? '🔒 Tornar Privado' : '🌐 Tornar Público';
+      }
+
+      // Info
+      document.getElementById('info-origin').textContent = originLabels[currentChar.origin];
+      if (currentChar.clan) {
+        document.getElementById('info-clan-row').style.display = 'block';
+        document.getElementById('info-clan').textContent = currentChar.clan;
+      }
+      document.getElementById('info-spec').textContent = specLabels[currentChar.specialization];
+      document.getElementById('info-key').textContent = attrLabels[currentChar.keyAttribute];
+
+      // Defense = 10 + mod DESTREZA + ½ nível (nível 1 = 0)
+      const desMod = Math.floor((currentChar.attributes.agi - 10) / 2);
+      document.getElementById('info-defense').textContent = 10 + desMod;
+
+      // CD = 10 + ½ nível + mod atributo-chave
+      const keyMod = Math.floor((currentChar.attributes[currentChar.keyAttribute] - 10) / 2);
+      document.getElementById('info-cd').textContent = 10 + keyMod;
+    }
+
+    // HP/PE adjustments
+    window.adjustHp = async function(amount) {
+      if (!isOwner) return;
+      const newHp = Math.max(0, Math.min(currentChar.maxHp, currentChar.currentHp + amount));
+      await updateDoc(doc(db, 'characters', charId), { currentHp: newHp });
+      currentChar.currentHp = newHp;
+      document.getElementById('hp-display').textContent = `${currentChar.currentHp}/${currentChar.maxHp}`;
+    };
+
+    window.adjustPe = async function(amount) {
+      if (!isOwner || currentChar.specialization === 'restringido') return;
+      const newPe = Math.max(0, Math.min(currentChar.maxPe, currentChar.currentPe + amount));
+      await updateDoc(doc(db, 'characters', charId), { currentPe: newPe });
+      currentChar.currentPe = newPe;
+      document.getElementById('pe-display').textContent = `${currentChar.currentPe}/${currentChar.maxPe}`;
+    };
+
+    // Dice roller
+    window.rollDice = function(sides) {
+      const roll = Math.floor(Math.random() * sides) + 1;
+      document.getElementById('roll-result').innerHTML = `
+        <div class="roll-total">${roll}</div>
+        <div class="roll-details">d${sides} = ${roll}</div>
+      `;
+    };
+
+    window.rollCustom = function() {
+      const count = parseInt(prompt('Quantidade de dados:', '1')) || 1;
+      const sides = parseInt(prompt('Tipo de dado (ex: 6, 8, 10, 12):', '20')) || 20;
+      const bonus = parseInt(prompt('Bônus (opcional):', '0')) || 0;
+      
+      let total = 0;
+      const rolls = [];
+      for (let i = 0; i < count; i++) {
+        const roll = Math.floor(Math.random() * sides) + 1;
+        rolls.push(roll);
+        total += roll;
+      }
+      total += bonus;
+      
+      document.getElementById('roll-result').innerHTML = `
+        <div class="roll-total">${total}</div>
+        <div class="roll-details">${count}d${sides}${bonus > 0 ? '+' + bonus : ''} = [${rolls.join(', ')}]${bonus > 0 ? ' + ' + bonus : ''}</div>
+      `;
+    };
+
+    // Damage calculator
+    window.calculateDamage = function() {
+      const count = parseInt(document.getElementById('dmg-dice-count').value) || 1;
+      const sides = parseInt(document.getElementById('dmg-dice-type').value) || 8;
+      const bonus = parseInt(document.getElementById('dmg-bonus').value) || 0;
+      const rd = parseInt(document.getElementById('dmg-rd').value) || 0;
+      
+      let total = 0;
+      for (let i = 0; i < count; i++) {
+        total += Math.floor(Math.random() * sides) + 1;
+      }
+      total += bonus;
+      const final = Math.max(0, total - rd);
+      
+      document.getElementById('dmg-result').innerHTML = 
+        `Dano: <strong>${final}</strong> (${total} total - ${rd} RD)`;
+    };
+
+    // Toggle public
+    window.togglePublic = async function() {
+      if (!isOwner) return;
+      const newPublic = !currentChar.public;
+      await updateDoc(doc(db, 'characters', charId), { public: newPublic });
+      currentChar.public = newPublic;
+      document.getElementById('public-btn-text').textContent = newPublic ? '🔒 Tornar Privado' : '🌐 Tornar Público';
+      renderCharacter();
+    };
+
+    // Delete
+    window.deleteCharacter = async function() {
+      if (!isOwner) return;
+      if (!confirm('Tem certeza que deseja excluir esta ficha?')) return;
+      await deleteDoc(doc(db, 'characters', charId));
+      window.location.href = 'agentes.html';
+    };
+  </script>
+</body>
+</html>

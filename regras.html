@@ -1,0 +1,554 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Regras - CRIS</title>
+  <link rel="stylesheet" href="css/main.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+  <div class="layout-main">
+    <!-- Sidebar -->
+    <nav class="sidebar">
+      <div class="sidebar-header">
+        <h1>CRIS</h1>
+        <span class="tagline">Feiticeiros & Maldições</span>
+      </div>
+      
+      <div class="nav-links">
+        <a href="index.html" class="nav-link">
+          <span class="icon">🏠</span> Painel
+        </a>
+        <a href="regras.html" class="nav-link active">
+          <span class="icon">📖</span> Regras
+        </a>
+        <a href="fichas-publicas.html" class="nav-link">
+          <span class="icon">🌐</span> Fichas Públicas
+        </a>
+        
+        <div class="nav-divider"></div>
+        
+        <a href="agentes.html" class="nav-link auth-only" style="display: none;">
+          <span class="icon">👥</span> Meus Agentes
+        </a>
+        <a href="nova-ficha.html" class="nav-link auth-only" style="display: none;">
+          <span class="icon">➕</span> Nova Ficha
+        </a>
+        <a href="missoes.html" class="nav-link auth-only" style="display: none;">
+          <span class="icon">🗺️</span> Missões
+        </a>
+        
+        <div class="nav-divider"></div>
+        
+        <a href="login.html" class="nav-link guest-only" id="login-link">
+          <span class="icon">🔑</span> Entrar
+        </a>
+        <button class="nav-link auth-only" id="logout-btn" style="display: none;">
+          <span class="icon">🚪</span> Sair
+        </button>
+      </div>
+    </nav>
+
+    <!-- Main Content -->
+    <div class="layout-content">
+      <header class="top-bar">
+        <h2 class="page-title">📖 Regras do Sistema</h2>
+      </header>
+      
+      <main class="layout-body">
+        <p class="text-muted" style="margin-bottom: 1.5rem;">
+          Referência completa de <strong>Feiticeiros & Maldições v2.5</strong> — regras, limitações e requerimentos.
+        </p>
+
+        <div class="rules-layout">
+          <!-- Sidebar de navegação -->
+          <nav class="rules-nav">
+            <button class="nav-btn active" data-section="intro">
+              <span class="icon">📖</span> Introdução
+            </button>
+            <button class="nav-btn" data-section="atributos">
+              <span class="icon">💪</span> Atributos
+            </button>
+            <button class="nav-btn" data-section="origens">
+              <span class="icon">✨</span> Origens
+            </button>
+            <button class="nav-btn" data-section="especializacoes">
+              <span class="icon">⚔️</span> Especializações
+            </button>
+            <button class="nav-btn" data-section="tecnicas">
+              <span class="icon">🔮</span> Técnicas & Feitiços
+            </button>
+            <button class="nav-btn" data-section="aptidoes">
+              <span class="icon">👻</span> Aptidões
+            </button>
+            <button class="nav-btn" data-section="invocacoes">
+              <span class="icon">👹</span> Invocações
+            </button>
+            <button class="nav-btn" data-section="votos">
+              <span class="icon">📜</span> Votos
+            </button>
+            <button class="nav-btn" data-section="combat">
+              <span class="icon">⚡</span> Combate
+            </button>
+          </nav>
+
+          <!-- Conteúdo -->
+          <div class="card content-card">
+            <!-- INTRODUÇÃO -->
+            <div id="intro" class="section-content active">
+              <h2><span class="icon">📖</span> Introdução</h2>
+              
+              <h3>Estrutura do Sistema</h3>
+              <p>Feiticeiros & Maldições é um RPG baseado no universo de Jujutsu Kaisen, focado em combate tático e personalização de personagens.</p>
+              
+              <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem; margin: 1rem 0;">
+                <div class="card" style="padding: 1rem;">
+                  <strong style="color: var(--accent);">Níveis</strong>
+                  <span class="text-muted" style="display: block; margin-top: 0.25rem;">1 a 20 (4º Grau → Especial)</span>
+                </div>
+                <div class="card" style="padding: 1rem;">
+                  <strong style="color: var(--accent);">Atributos</strong>
+                  <span class="text-muted" style="display: block; margin-top: 0.25rem;">6 atributos (0-30, média 10)</span>
+                </div>
+                <div class="card" style="padding: 1rem;">
+                  <strong style="color: var(--accent);">Modificadores</strong>
+                  <span class="text-muted" style="display: block; margin-top: 0.25rem;">+1 a cada 2 acima de 10</span>
+                </div>
+              </div>
+
+              <h3>Seis Atributos</h3>
+              <table class="rules-table">
+                <thead>
+                  <tr><th>Atributo</th><th>Uso Principal</th></tr>
+                </thead>
+                <tbody>
+                  <tr><td><strong>Força</strong></td><td>Dano físico, peso, salto</td></tr>
+                  <tr><td><strong>Destreza</strong></td><td>Agilidade, reflexos, equilíbrio</td></tr>
+                  <tr><td><strong>Constituição</strong></td><td>Vida, resistência, vigor</td></tr>
+                  <tr><td><strong>Inteligência</strong></td><td>Raciocínio, aprendizado</td></tr>
+                  <tr><td><strong>Sabedoria</strong></td><td>Percepção, experiência</td></tr>
+                  <tr><td><strong>Presença</strong></td><td>Influência, personalidade</td></tr>
+                </tbody>
+              </table>
+
+              <h3>Valores Derivados</h3>
+              <ul class="rules-list">
+                <li><strong>Defesa:</strong> 10 + mod Destreza + ½ nível + bônus</li>
+                <li><strong>Ataque:</strong> 1d20 + mod atributo + bônus treinamento</li>
+                <li><strong>CD Técnica:</strong> 10 + ½ nível + mod atributo + bônus treinamento</li>
+              </ul>
+            </div>
+
+            <!-- ATRIBUTOS -->
+            <div id="atributos" class="section-content">
+              <h2><span class="icon">💪</span> Atributos</h2>
+              
+              <h3>Pontos de Vida e Energia por Especialização</h3>
+              <table class="rules-table">
+                <thead>
+                  <tr><th>Especialização</th><th>PV Inicial</th><th>PE/Nível</th><th>Atributo-Chave</th></tr>
+                </thead>
+                <tbody>
+                  <tr><td>Lutador</td><td>12 + CON</td><td>4</td><td>Força/Destreza</td></tr>
+                  <tr><td>Esp. em Combate</td><td>12 + CON</td><td>4</td><td>Força/Destreza/SAB</td></tr>
+                  <tr><td>Esp. em Técnica</td><td>10 + CON</td><td>6 + mod</td><td>INT/SAB</td></tr>
+                  <tr><td>Controlador</td><td>10 + CON</td><td>5 + mod</td><td>PRE/SAB</td></tr>
+                  <tr><td>Suporte</td><td>10 + CON</td><td>5 + mod</td><td>PRE/SAB</td></tr>
+                  <tr><td>Restringido</td><td>16 + CON</td><td>Estamina*</td><td>Qualquer</td></tr>
+                </tbody>
+              </table>
+              <p class="note">*Restringidos usam Estamina, não PE</p>
+
+              <h4>Escolha do Atributo-Chave (RESTRIÇÃO)</h4>
+              <p class="text-muted">Cada especialização permite apenas atributos-chave específicos. Você deve escolher <strong>um</strong> dos atributos listados — não pode usar outros.</p>
+              <ul class="rules-list">
+                <li><strong>Lutador:</strong> Apenas <strong>Força</strong> ou <strong>Destreza</strong></li>
+                <li><strong>Esp. em Combate:</strong> Apenas <strong>Força</strong>, <strong>Destreza</strong> ou <strong>Sabedoria</strong></li>
+                <li><strong>Esp. em Técnica:</strong> Apenas <strong>Inteligência</strong> ou <strong>Sabedoria</strong> (+ mod PE)</li>
+                <li><strong>Controlador:</strong> Apenas <strong>Presença</strong> ou <strong>Sabedoria</strong> (+ mod PE)</li>
+                <li><strong>Suporte:</strong> Apenas <strong>Presença</strong> ou <strong>Sabedoria</strong> (+ mod PE)</li>
+                <li><strong>Restringido:</strong> Qualquer atributo (Estamina)</li>
+              </ul>
+              <p class="note"><strong>Importante:</strong> Não é possível escolher atributos fora da lista. Ex: Especialista em Técnica <strong>não pode</strong> ter Força como atributo-chave.</p>
+
+              <h3>Modificadores de Atributo</h3>
+              <div class="mod-grid">
+                <div class="mod-item"><span class="attr-val">30</span><span class="attr-mod">+10</span></div>
+                <div class="mod-item"><span class="attr-val">28</span><span class="attr-mod">+9</span></div>
+                <div class="mod-item"><span class="attr-val">26</span><span class="attr-mod">+8</span></div>
+                <div class="mod-item"><span class="attr-val">24</span><span class="attr-mod">+7</span></div>
+                <div class="mod-item"><span class="attr-val">22</span><span class="attr-mod">+6</span></div>
+                <div class="mod-item"><span class="attr-val">20</span><span class="attr-mod">+5</span></div>
+                <div class="mod-item"><span class="attr-val">18</span><span class="attr-mod">+4</span></div>
+                <div class="mod-item"><span class="attr-val">16</span><span class="attr-mod">+3</span></div>
+                <div class="mod-item"><span class="attr-val">14</span><span class="attr-mod">+2</span></div>
+                <div class="mod-item"><span class="attr-val">12</span><span class="attr-mod">+1</span></div>
+                <div class="mod-item"><span class="attr-val">10</span><span class="attr-mod">0</span></div>
+                <div class="mod-item"><span class="attr-val">8</span><span class="attr-mod">-1</span></div>
+                <div class="mod-item"><span class="attr-val">6</span><span class="attr-mod">-2</span></div>
+                <div class="mod-item"><span class="attr-val">4</span><span class="attr-mod">-3</span></div>
+                <div class="mod-item"><span class="attr-val">2</span><span class="attr-mod">-4</span></div>
+                <div class="mod-item"><span class="attr-val">0</span><span class="attr-mod">-5</span></div>
+              </div>
+            </div>
+
+            <!-- ORIGENS -->
+            <div id="origens" class="section-content">
+              <h2><span class="icon">✨</span> Origens</h2>
+              
+              <div class="origin-card">
+                <h4>✨ Inato</h4>
+                <p>Técnica única, não herdada. +2/+1 em atributos, talento nível 1 e 4, <strong>marca registrada</strong> (1 feitiço extra com custo -1).</p>
+                <span class="tag">Requisito: Nenhum</span>
+              </div>
+
+              <div class="origin-card">
+                <h4>👑 Herdado</h4>
+                <p>Clãs tradicionais (Gojo, Inumaki, Kamo, Zenin). Técnicas herdadas com bônus específicos de clã.</p>
+                <span class="tag">Requisito: Escolher clã</span>
+              </div>
+
+              <div class="origin-card">
+                <h4>🌟 Derivado</h4>
+                <p>Energia antinatural. +2/+1 em atributos, aptidão de Aura, <strong>reserva oculta</strong> (PE temporário ao ficar sem PE).</p>
+                <span class="tag">Requisito: Nível 1</span>
+              </div>
+
+              <div class="origin-card">
+                <h4>💪 Restringido</h4>
+                <p>Físico abençoado. +5 atributos físicos, deslocamento +3m, imunidade a doenças, limite atributo físico 30.</p>
+                <span class="tag warning">Requisito: Nível 1 + Especialização Restringido</span>
+              </div>
+
+              <div class="origin-card">
+                <h4>👁️ Feto Amaldiçoado Híbrido</h4>
+                <p>Herança maldita. Físico amaldiçoado (anatomia mutante), cura reversa reduzida, vigor maldito.</p>
+                <span class="tag">Requisito: Nível 1</span>
+              </div>
+
+              <div class="origin-card">
+                <h4>📚 Sem Técnica</h4>
+                <p>Versátil, domina perícias. Sem feitiços. Não pode ser Especialista em Técnica.</p>
+                <span class="tag">Requisito: Nível 1</span>
+              </div>
+
+              <div class="origin-card">
+                <h4>🎭 Corpo Amaldiçoado Mutante</h4>
+                <p>Criado por Masamichi Yaga. Núcleo como coração, pode ter múltiplos núcleos, produz PE.</p>
+                <span class="tag">Casos especiais (ex: Panda)</span>
+              </div>
+            </div>
+
+            <!-- ESPECIALIZAÇÕES -->
+            <div id="especializacoes" class="section-content">
+              <h2><span class="icon">⚔️</span> Especializações</h2>
+
+              <div class="spec-section">
+                <h4>⚔️ Lutador</h4>
+                <ul class="rules-list">
+                  <li><strong>Corpo Treinado:</strong> Ataque desarmado bônus, dano 1d8→2d12</li>
+                  <li><strong>Empolgação:</strong> Níveis 1-5 com dados de empolgação</li>
+                </ul>
+                <p style="font-size: 0.8rem; color: var(--text-secondary); margin-top: 0.5rem;">Multiclasse: Força ou Destreza 16 | Atributo-chave: Força ou Destreza</p>
+              </div>
+
+              <div class="spec-section">
+                <h4>🛡️ Especialista em Combate</h4>
+                <ul class="rules-list">
+                  <li><strong>Repertório:</strong> Estilos de combate (Guardião, Carrasco, Tático, Caçador)</li>
+                  <li><strong>Artes do Combate:</strong> Pontos de preparo para habilidades</li>
+                </ul>
+                <p style="font-size: 0.8rem; color: var(--text-secondary); margin-top: 0.5rem;">Multiclasse: Força ou Destreza 16 | Atributo-chave: Força, Destreza ou Sabedoria</p>
+              </div>
+
+              <div class="spec-section">
+                <h4>🔮 Especialista em Técnica</h4>
+                <ul class="rules-list">
+                  <li><strong>Técnica Avançada:</strong> Bônus na CD da técnica</li>
+                  <li><strong>Criação Eficiente:</strong> Feitiços -1 PE</li>
+                </ul>
+                <p style="font-size: 0.8rem; color: var(--text-secondary); margin-top: 0.5rem;">Multiclasse: INT ou SAB 16 | Atributo-chave: Inteligência ou Sabedoria (+mod PE)</p>
+              </div>
+
+              <div class="spec-section">
+                <h4>👹 Controlador</h4>
+                <ul class="rules-list">
+                  <li><strong>Invocar:</strong> Shikigamis e Marionetes</li>
+                  <li><strong>Comandar Invocações:</strong> Controle de criaturas</li>
+                </ul>
+                <p style="font-size: 0.8rem; color: var(--text-secondary); margin-top: 0.5rem;">Multiclasse: PRE ou SAB 16 | Atributo-chave: Presença ou Sabedoria (+mod PE)</p>
+              </div>
+
+              <div class="spec-section">
+                <h4>💚 Suporte</h4>
+                <ul class="rules-list">
+                  <li><strong>Suporte em Combate:</strong> Curar como ação bônus</li>
+                  <li><strong>Presença Inspiradora:</strong> Bônus para aliados</li>
+                </ul>
+                <p style="font-size: 0.8rem; color: var(--text-secondary); margin-top: 0.5rem;">Multiclasse: PRE ou SAB 16 | Atributo-chave: Presença ou Sabedoria (+mod PE)</p>
+              </div>
+
+              <div class="spec-section">
+                <h4>⭐ Restringido</h4>
+                <ul class="rules-list">
+                  <li><strong>Físico Celestial:</strong> Estamina, dano desarmado 1d12→2d12</li>
+                  <li><strong>Técnicas Marciais:</strong> Pugilato, chutes, agarramentos</li>
+                </ul>
+                <p style="font-size: 0.8rem; color: var(--text-secondary); margin-top: 0.5rem;">Requer Origem Restringido | Atributo-chave: Qualquer (usa Estamina)</p>
+              </div>
+            </div>
+
+            <!-- TÉCNICAS -->
+            <div id="tecnicas" class="section-content">
+              <h2><span class="icon">🔮</span> Técnicas & Feitiços</h2>
+              
+              <h3>Feitiços por Nível</h3>
+              <table class="rules-table">
+                <thead>
+                  <tr><th>Nível</th><th>Custo PE</th><th>Acesso</th></tr>
+                </thead>
+                <tbody>
+                  <tr><td>0</td><td>0</td><td>Nível 1+</td></tr>
+                  <tr><td>1</td><td>2</td><td>Nível 1+</td></tr>
+                  <tr><td>2</td><td>5</td><td>Nível 5+</td></tr>
+                  <tr><td>3</td><td>8</td><td>Nível 9+</td></tr>
+                  <tr><td>4</td><td>12</td><td>Nível 13+</td></tr>
+                  <tr><td>5</td><td>20</td><td>Nível 17+</td></tr>
+                  <tr><td>Téc. Máxima</td><td>25</td><td>Especial</td></tr>
+                </tbody>
+              </table>
+
+              <h4>Limitações de Customização</h4>
+              <ul class="rules-list">
+                <li>Dano: máximo ±(1 + nível) dados</li>
+                <li>Acerto: máximo ±(2 × nível)</li>
+                <li>CD: máximo ±(1 + nível)</li>
+                <li>Custo PE: não alterável na criação (mínimo 1)</li>
+              </ul>
+
+              <h4>Dano por Nível (Alvo Único)</h4>
+              <table class="rules-table">
+                <thead>
+                  <tr><th>Nível</th><th>Teste Resistência</th><th>Teste Ataque</th></tr>
+                </thead>
+                <tbody>
+                  <tr><td>0</td><td>1d10</td><td>1d10</td></tr>
+                  <tr><td>1</td><td>3d8</td><td>4d8</td></tr>
+                  <tr><td>2</td><td>7d8</td><td>8d8</td></tr>
+                  <tr><td>3</td><td>12d8</td><td>14d8</td></tr>
+                  <tr><td>4</td><td>14d10</td><td>16d10</td></tr>
+                  <tr><td>5</td><td>18d12</td><td>20d12</td></tr>
+                  <tr><td>Téc. Máx.</td><td>26d12</td><td>28d12</td></tr>
+                </tbody>
+              </table>
+            </div>
+
+            <!-- APTIDÕES -->
+            <div id="aptidoes" class="section-content">
+              <h2><span class="icon">👻</span> Aptidões Amaldiçoadas</h2>
+
+              <div class="aptitude-card">
+                <h4>👻 Aura (Níveis 1-5)</h4>
+                <p>Cobrir-se, Canalizar em Golpe, Projeção de Energia, Raio Negro (nível 5+)</p>
+              </div>
+
+              <div class="aptitude-card">
+                <h4>📡 Controle e Leitura (Níveis 1-5)</h4>
+                <p>Leitura de Energia, Rastreio, Projeção Avançada, Punho Divergente</p>
+              </div>
+
+              <div class="aptitude-card">
+                <h4>🏛️ Domínio (Níveis 1-5)</h4>
+                <ul class="rules-list">
+                  <li><strong>Nível 1:</strong> Revestimento de Domínio</li>
+                  <li><strong>Nível 2:</strong> Anular Técnica, Expansão Incompleta</li>
+                  <li><strong>Nível 3:</strong> Expansão Completa</li>
+                  <li><strong>Nível 4:</strong> Acerto Garantido</li>
+                  <li><strong>Nível 5:</strong> Sem Barreiras (nível 20)</li>
+                </ul>
+              </div>
+
+              <div class="aptitude-card">
+                <h4>💚 Energia Reversa (Níveis 1-5)</h4>
+                <p>Energia Reversa (cura), Cura Amplificada, Regeneração, Fluxo Constante, Canalizar ER</p>
+              </div>
+
+              <h3>Expansões de Domínio</h3>
+              <table class="rules-table">
+                <thead>
+                  <tr><th>Tipo</th><th>Custo</th><th>Área</th></tr>
+                </thead>
+                <tbody>
+                  <tr><td>Incompleta</td><td>15 PE</td><td>4,5m × bônus</td></tr>
+                  <tr><td>Completa</td><td>20 PE</td><td>9m esférica</td></tr>
+                  <tr><td>+ Acerto Garantido</td><td>+5 PE</td><td>—</td></tr>
+                  <tr><td>Sem Barreiras</td><td>20 PE</td><td>Alcance superior</td></tr>
+                </tbody>
+              </table>
+            </div>
+
+            <!-- INVOCAÇÕES -->
+            <div id="invocacoes" class="section-content">
+              <h2><span class="icon">👹</span> Invocações</h2>
+              
+              <h3>Graus de Invocação</h3>
+              <table class="rules-table">
+                <thead>
+                  <tr><th>Grau</th><th>Acesso</th><th>Custo PE</th></tr>
+                </thead>
+                <tbody>
+                  <tr><td>4º</td><td>Nível 1-4</td><td>2</td></tr>
+                  <tr><td>3º</td><td>Nível 5-8</td><td>4</td></tr>
+                  <tr><td>2º</td><td>Nível 9-12</td><td>6</td></tr>
+                  <tr><td>1º</td><td>Nível 13-16</td><td>8</td></tr>
+                  <tr><td>Especial</td><td>Nível 17+</td><td>12</td></tr>
+                </tbody>
+              </table>
+            </div>
+
+            <!-- VOTOS -->
+            <div id="votos" class="section-content">
+              <h2><span class="icon">📜</span> Votos de Restrição</h2>
+
+              <div class="voto-type">
+                <h4>📜 Votos Próprios</h4>
+                <ul class="rules-list">
+                  <li><strong>Temporários:</strong> Máximo Pesado</li>
+                  <li><strong>Permanentes:</strong> Mínimo Médio</li>
+                </ul>
+              </div>
+
+              <div class="voto-type">
+                <h4>🤝 Votos Contratuais</h4>
+                <p>Sem pesos pré-definidos. Condições definidas por acordo.</p>
+                <p style="color: var(--danger);">Quebrar: "Pior que a morte"</p>
+              </div>
+
+              <div class="voto-type">
+                <h4>⚡ Votos Emergenciais</h4>
+                <p>Malefício sempre 1 peso maior que benefício</p>
+              </div>
+
+              <h3>Tabela de Pesos</h3>
+              <table class="rules-table">
+                <thead>
+                  <tr><th>Peso</th><th>Benefício</th><th>Malefício</th></tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td><span class="peso leve">Leve</span></td>
+                    <td>Modificar técnica, +2d dano</td>
+                    <td>Durante ataque/turno</td>
+                  </tr>
+                  <tr>
+                    <td><span class="peso medio">Médio</span></td>
+                    <td>Aptidão 4 níveis antes, +2 PE máx</td>
+                    <td>Sem aptidão 2 rodadas</td>
+                  </tr>
+                  <tr>
+                    <td><span class="peso pesado">Pesado</span></td>
+                    <td>Recuperar PE, +4 PE aptidão</td>
+                    <td>Ferimento complexo</td>
+                  </tr>
+                  <tr>
+                    <td><span class="peso extremo">Extremo</span></td>
+                    <td>Recuperar ½ PE máx, anular ataque</td>
+                    <td>Ferimento permanente, defesa 0</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+
+            <!-- COMBATE -->
+            <div id="combat" class="section-content">
+              <h2><span class="icon">⚡</span> Combate</h2>
+              
+              <h3>Ações em Combate</h3>
+              <table class="rules-table">
+                <thead>
+                  <tr><th>Ação</th><th>Descrição</th></tr>
+                </thead>
+                <tbody>
+                  <tr><td><strong>Comum</strong></td><td>Atacar, conjurar feitiço, usar item</td></tr>
+                  <tr><td><strong>Bônus</strong></td><td>Habilidade extra</td></tr>
+                  <tr><td><strong>Movimento</strong></td><td>Deslocamento (9m base + mod)</td></tr>
+                  <tr><td><strong>Reação</strong></td><td>Aparar, desviar</td></tr>
+                  <tr><td><strong>Completa</strong></td><td>Conjuração poderosa</td></tr>
+                </tbody>
+              </table>
+
+              <h3>Condições (Níveis)</h3>
+              <table class="rules-table">
+                <thead>
+                  <tr><th>Nível</th><th>Duração Nv. 5</th><th>Exemplos</th></tr>
+                </thead>
+                <tbody>
+                  <tr><td>Fraca</td><td>5 rodadas</td><td>Amedrontado, Caído</td></tr>
+                  <tr><td>Média</td><td>4 rodadas</td><td>Envenenado, Paralisado</td></tr>
+                  <tr><td>Forte</td><td>3 rodadas</td><td>Petrificado, Atordoado</td></tr>
+                  <tr><td>Extrema</td><td>1 rodada</td><td>Incapacitado, Cegueira</td></tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </main>
+    </div>
+  </div>
+
+  <!-- Firebase -->
+  <script type="module">
+    import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js';
+    import { getAuth, onAuthStateChanged, signOut } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js';
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyBxc2Qk2cK2V_75N6qQJQL4I1lM22jiiaw",
+      authDomain: "cris-feiticeiros-maldicoes.firebaseapp.com",
+      projectId: "cris-feiticeiros-maldicoes",
+      storageBucket: "cris-feiticeiros-maldicoes.appspot.com",
+      messagingSenderId: "142025569303",
+      appId: "1:142025569303:web:46a076e3b22fc9c2b6f85e"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+
+    onAuthStateChanged(auth, (user) => {
+      const authElements = document.querySelectorAll('.auth-only');
+      const guestElements = document.querySelectorAll('.guest-only');
+
+      if (user) {
+        authElements.forEach(el => el.style.display = '');
+        guestElements.forEach(el => el.style.display = 'none');
+      } else {
+        authElements.forEach(el => el.style.display = 'none');
+        guestElements.forEach(el => el.style.display = '');
+      }
+    });
+
+    document.getElementById('logout-btn')?.addEventListener('click', async () => {
+      await signOut(auth);
+      window.location.href = 'index.html';
+    });
+  </script>
+
+  <!-- Section Navigation -->
+  <script>
+    document.querySelectorAll('.rules-nav .nav-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const section = btn.dataset.section;
+        
+        // Update active button
+        document.querySelectorAll('.rules-nav .nav-btn').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        
+        // Show section
+        document.querySelectorAll('.section-content').forEach(s => s.classList.remove('active'));
+        document.getElementById(section).classList.add('active');
+      });
+    });
+  </script>
+</body>
+</html>

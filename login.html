@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Entrar - CRIS</title>
+  <link rel="stylesheet" href="css/main.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    .login-container {
+      max-width: 400px;
+      margin: 2rem auto;
+    }
+    
+    .login-card {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: var(--radius);
+      padding: 2rem;
+    }
+    
+    .login-card h2 {
+      text-align: center;
+      margin-bottom: 1.5rem;
+      color: var(--accent);
+    }
+    
+    .tabs {
+      display: flex;
+      gap: 0.5rem;
+      margin-bottom: 1.5rem;
+    }
+    
+    .tab-btn {
+      flex: 1;
+      padding: 0.6rem;
+      border: 1px solid var(--card-border);
+      background: var(--bg-secondary);
+      color: var(--text-secondary);
+      border-radius: var(--radius);
+      cursor: pointer;
+      font-family: inherit;
+      transition: all 0.15s;
+    }
+    
+    .tab-btn.active {
+      background: var(--accent);
+      color: white;
+      border-color: var(--accent);
+    }
+    
+    .tab-content {
+      display: none;
+    }
+    
+    .tab-content.active {
+      display: block;
+    }
+    
+    .btn-full {
+      width: 100%;
+      margin-top: 1rem;
+    }
+    
+    .error-msg {
+      color: var(--danger);
+      font-size: 0.85rem;
+      margin-top: 0.5rem;
+      text-align: center;
+    }
+  </style>
+</head>
+<body>
+  <div class="layout-main">
+    <!-- Sidebar -->
+    <nav class="sidebar">
+      <div class="sidebar-header">
+        <h1>CRIS</h1>
+        <span class="tagline">Feiticeiros & Maldições</span>
+      </div>
+      
+      <div class="nav-links">
+        <a href="index.html" class="nav-link">
+          <span class="icon">🏠</span> Painel
+        </a>
+        <a href="regras.html" class="nav-link">
+          <span class="icon">📖</span> Regras
+        </a>
+        <a href="fichas-publicas.html" class="nav-link">
+          <span class="icon">🌐</span> Fichas Públicas
+        </a>
+        <div class="nav-divider"></div>
+        <a href="login.html" class="nav-link active">
+          <span class="icon">🔑</span> Entrar
+        </a>
+      </div>
+    </nav>
+
+    <!-- Main Content -->
+    <div class="layout-content">
+      <header class="top-bar">
+        <h2 class="page-title">🔐 Autenticação</h2>
+      </header>
+      
+      <main class="layout-body">
+        <div class="login-container">
+          <div class="login-card">
+            <h2>CRIS</h2>
+            
+            <div class="tabs">
+              <button class="tab-btn active" data-tab="login">Entrar</button>
+              <button class="tab-btn" data-tab="register">Criar Conta</button>
+            </div>
+            
+            <!-- Login Form -->
+            <div id="login" class="tab-content active">
+              <div class="field">
+                <label class="label">Email</label>
+                <input type="email" id="login-email" class="input" placeholder="seu@email.com">
+              </div>
+              <div class="field">
+                <label class="label">Senha</label>
+                <input type="password" id="login-password" class="input" placeholder="••••••••">
+              </div>
+              <button class="btn btn-primary btn-full" id="btn-login">Entrar</button>
+              <p class="error-msg" id="login-error"></p>
+            </div>
+            
+            <!-- Register Form -->
+            <div id="register" class="tab-content">
+              <div class="field">
+                <label class="label">Email</label>
+                <input type="email" id="register-email" class="input" placeholder="seu@email.com">
+              </div>
+              <div class="field">
+                <label class="label">Senha</label>
+                <input type="password" id="register-password" class="input" placeholder="Mínimo 6 caracteres">
+              </div>
+              <div class="field">
+                <label class="label">Confirmar Senha</label>
+                <input type="password" id="register-confirm" class="input" placeholder="••••••••">
+              </div>
+              <button class="btn btn-primary btn-full" id="btn-register">Criar Conta</button>
+              <p class="error-msg" id="register-error"></p>
+            </div>
+          </div>
+        </div>
+      </main>
+    </div>
+  </div>
+
+  <!-- Firebase -->
+  <script type="module">
+    import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js';
+    import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword, onAuthStateChanged } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js';
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyBxc2Qk2cK2V_75N6qQJQL4I1lM22jiiaw",
+      authDomain: "cris-feiticeiros-maldicoes.firebaseapp.com",
+      projectId: "cris-feiticeiros-maldicoes",
+      storageBucket: "cris-feiticeiros-maldicoes.appspot.com",
+      messagingSenderId: "142025569303",
+      appId: "1:142025569303:web:46a076e3b22fc9c2b6f85e"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+
+    // Redirect if already logged in
+    onAuthStateChanged(auth, (user) => {
+      if (user) {
+        window.location.href = 'index.html';
+      }
+    });
+
+    // Tabs
+    document.querySelectorAll('.tab-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const tab = btn.dataset.tab;
+        document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+        document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+        btn.classList.add('active');
+        document.getElementById(tab).classList.add('active');
+      });
+    });
+
+    // Login
+    document.getElementById('btn-login').addEventListener('click', async () => {
+      const email = document.getElementById('login-email').value;
+      const password = document.getElementById('login-password').value;
+      const errorEl = document.getElementById('login-error');
+      
+      try {
+        await signInWithEmailAndPassword(auth, email, password);
+        window.location.href = 'index.html';
+      } catch (error) {
+        errorEl.textContent = getErrorMessage(error.code);
+      }
+    });
+
+    // Register
+    document.getElementById('btn-register').addEventListener('click', async () => {
+      const email = document.getElementById('register-email').value;
+      const password = document.getElementById('register-password').value;
+      const confirm = document.getElementById('register-confirm').value;
+      const errorEl = document.getElementById('register-error');
+      
+      if (password !== confirm) {
+        errorEl.textContent = 'As senhas não coincidem';
+        return;
+      }
+      
+      if (password.length < 6) {
+        errorEl.textContent = 'A senha deve ter pelo menos 6 caracteres';
+        return;
+      }
+      
+      try {
+        await createUserWithEmailAndPassword(auth, email, password);
+        window.location.href = 'index.html';
+      } catch (error) {
+        errorEl.textContent = getErrorMessage(error.code);
+      }
+    });
+
+    function getErrorMessage(code) {
+      const messages = {
+        'auth/invalid-email': 'Email inválido',
+        'auth/user-disabled': 'Conta desativada',
+        'auth/user-not-found': 'Usuário não encontrado',
+        'auth/wrong-password': 'Senha incorreta',
+        'auth/email-already-in-use': 'Email já cadastrado',
+        'auth/weak-password': 'Senha muito fraca',
+        'auth/invalid-credential': 'Email ou senha incorretos'
+      };
+      return messages[code] || 'Erro ao autenticar';
+    }
+  </script>
+</body>
+</html>

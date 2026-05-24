@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Fichas Públicas - CRIS</title>
+  <link rel="stylesheet" href="css/main.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    .characters-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 1rem;
+    }
+    
+    .char-card {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: var(--radius);
+      padding: 1.25rem;
+      cursor: pointer;
+      transition: all 0.15s;
+    }
+    
+    .char-card:hover {
+      border-color: var(--accent);
+    }
+    
+    .char-card h3 {
+      margin: 0 0 0.5rem;
+      color: var(--accent);
+    }
+    
+    .char-meta {
+      font-size: 0.85rem;
+      color: var(--text-secondary);
+      margin-bottom: 0.75rem;
+    }
+    
+    .char-stats {
+      display: flex;
+      gap: 1rem;
+      font-size: 0.9rem;
+    }
+    
+    .char-stat {
+      display: flex;
+      align-items: center;
+      gap: 0.25rem;
+    }
+    
+    .char-stat .label {
+      color: var(--text-secondary);
+      font-size: 0.75rem;
+    }
+    
+    .char-stat .value {
+      font-weight: 600;
+    }
+    
+    .empty-state {
+      text-align: center;
+      padding: 3rem;
+      color: var(--text-secondary);
+    }
+    
+    .spec-tag {
+      display: inline-block;
+      padding: 0.2rem 0.5rem;
+      background: var(--accent-muted);
+      border-radius: 4px;
+      font-size: 0.75rem;
+      margin-right: 0.5rem;
+    }
+    
+    .filter-bar {
+      display: flex;
+      gap: 1rem;
+      margin-bottom: 1.5rem;
+      flex-wrap: wrap;
+    }
+    
+    .filter-bar select {
+      width: auto;
+      min-width: 150px;
+    }
+  </style>
+</head>
+<body>
+  <div class="layout-main">
+    <!-- Sidebar -->
+    <nav class="sidebar">
+      <div class="sidebar-header">
+        <h1>CRIS</h1>
+        <span class="tagline">Feiticeiros & Maldições</span>
+      </div>
+      
+      <div class="nav-links">
+        <a href="index.html" class="nav-link">
+          <span class="icon">🏠</span> Painel
+        </a>
+        <a href="regras.html" class="nav-link">
+          <span class="icon">📖</span> Regras
+        </a>
+        <a href="fichas-publicas.html" class="nav-link active">
+          <span class="icon">🌐</span> Fichas Públicas
+        </a>
+        
+        <div class="nav-divider"></div>
+        
+        <a href="agentes.html" class="nav-link auth-only" style="display: none;">
+          <span class="icon">👥</span> Meus Agentes
+        </a>
+        <a href="nova-ficha.html" class="nav-link auth-only" style="display: none;">
+          <span class="icon">➕</span> Nova Ficha
+        </a>
+        
+        <div class="nav-divider"></div>
+        
+        <a href="login.html" class="nav-link guest-only" id="login-link">
+          <span class="icon">🔑</span> Entrar
+        </a>
+        <button class="nav-link auth-only" id="logout-btn" style="display: none;">
+          <span class="icon">🚪</span> Sair
+        </button>
+      </div>
+    </nav>
+
+    <!-- Main Content -->
+    <div class="layout-content">
+      <header class="top-bar">
+        <h2 class="page-title">🌐 Fichas Públicas</h2>
+      </header>
+      
+      <main class="layout-body">
+        <p class="text-muted" style="margin-bottom: 1rem;">
+          Inspire-se com builds compartilhadas pela comunidade.
+        </p>
+        
+        <div class="filter-bar">
+          <select id="filter-spec" class="input">
+            <option value="">Todas Especializações</option>
+            <option value="lutador">Lutador</option>
+            <option value="especialista_combate">Especialista em Combate</option>
+            <option value="especialista_tecnica">Especialista em Técnica</option>
+            <option value="controlador">Controlador</option>
+            <option value="suporte">Suporte</option>
+            <option value="restringido">Restringido</option>
+          </select>
+          
+          <select id="filter-origin" class="input">
+            <option value="">Todas Origens</option>
+            <option value="inato">Inato</option>
+            <option value="herdado">Herdado</option>
+            <option value="derivado">Derivado</option>
+            <option value="restringido">Restringido</option>
+            <option value="feto">Feto Híbrido</option>
+          </select>
+        </div>
+        
+        <div id="characters-list" class="characters-grid">
+          <div class="empty-state">
+            <p>Carregando...</p>
+          </div>
+        </div>
+      </main>
+    </div>
+  </div>
+
+  <!-- Firebase -->
+  <script type="module">
+    import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js';
+    import { getAuth, onAuthStateChanged, signOut } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js';
+    import { getFirestore, collection, query, where, getDocs, orderBy, limit } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js';
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyBxc2Qk2cK2V_75N6qQJQL4I1lM22jiiaw",
+      authDomain: "cris-feiticeiros-maldicoes.firebaseapp.com",
+      projectId: "cris-feiticeiros-maldicoes",
+      storageBucket: "cris-feiticeiros-maldicoes.appspot.com",
+      messagingSenderId: "142025569303",
+      appId: "1:142025569303:web:46a076e3b22fc9c2b6f85e"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+    const db = getFirestore(app);
+
+    onAuthStateChanged(auth, (user) => {
+      if (user) {
+        document.querySelectorAll('.auth-only').forEach(el => el.style.display = '');
+        document.querySelectorAll('.guest-only').forEach(el => el.style.display = 'none');
+      } else {
+        document.querySelectorAll('.auth-only').forEach(el => el.style.display = 'none');
+        document.querySelectorAll('.guest-only').forEach(el => el.style.display = '');
+      }
+    });
+
+    document.getElementById('logout-btn')?.addEventListener('click', async () => {
+      await signOut(auth);
+      window.location.href = 'index.html';
+    });
+
+    let allCharacters = [];
+
+    async function loadCharacters() {
+      const container = document.getElementById('characters-list');
+      
+      try {
+        const q = query(
+          collection(db, 'characters'),
+          where('public', '==', true),
+          orderBy('createdAt', 'desc'),
+          limit(50)
+        );
+        
+        const snapshot = await getDocs(q);
+        
+        allCharacters = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+        renderCharacters();
+        
+      } catch (error) {
+        console.error(error);
+        container.innerHTML = `
+          <div class="empty-state" style="grid-column: 1 / -1;">
+            <p>Erro ao carregar fichas.</p>
+          </div>
+        `;
+      }
+    }
+
+    function renderCharacters() {
+      const container = document.getElementById('characters-list');
+      const specFilter = document.getElementById('filter-spec').value;
+      const originFilter = document.getElementById('filter-origin').value;
+      
+      let filtered = allCharacters;
+      if (specFilter) filtered = filtered.filter(c => c.specialization === specFilter);
+      if (originFilter) filtered = filtered.filter(c => c.origin === originFilter);
+      
+      if (filtered.length === 0) {
+        container.innerHTML = `
+          <div class="empty-state" style="grid-column: 1 / -1;">
+            <p>Nenhuma ficha pública encontrada.</p>
+          </div>
+        `;
+        return;
+      }
+      
+      const specLabels = {
+        lutador: 'Lutador',
+        especialista_combate: 'Esp. Combate',
+        especialista_tecnica: 'Esp. Técnica',
+        controlador: 'Controlador',
+        suporte: 'Suporte',
+        restringido: 'Restringido'
+      };
+      
+      const originLabels = {
+        inato: 'Inato',
+        herdado: 'Herdado',
+        derivado: 'Derivado',
+        restringido: 'Restringido',
+        feto: 'Feto Híbrido',
+        sem_tecnica: 'Sem Técnica'
+      };
+      
+      container.innerHTML = filtered.map(char => `
+        <div class="char-card" onclick="window.location.href='ficha.html?id=${char.id}'">
+          <h3>${char.name || 'Sem Nome'}</h3>
+          <div class="char-meta">
+            <span class="spec-tag">Nível ${char.level}</span>
+            <span class="spec-tag">${specLabels[char.specialization] || char.specialization}</span>
+            <span class="spec-tag">${originLabels[char.origin] || char.origin}</span>
+          </div>
+          <div class="char-stats">
+            <div class="char-stat">
+              <span class="label">PV:</span>
+              <span class="value">${char.maxHp}</span>
+            </div>
+            ${char.maxPe > 0 ? `
+            <div class="char-stat">
+              <span class="label">PE:</span>
+              <span class="value">${char.maxPe}</span>
+            </div>
+            ` : `
+            <div class="char-stat">
+              <span class="label">Estamina</span>
+            </div>
+            `}
+          </div>
+        </div>
+      `).join('');
+    }
+
+    document.getElementById('filter-spec').addEventListener('change', renderCharacters);
+    document.getElementById('filter-origin').addEventListener('change', renderCharacters);
+
+    loadCharacters();
+  </script>
+</body>
+</html>
